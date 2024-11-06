@@ -1,13 +1,13 @@
 {
-  "name": "helloworld",
-  "displayName": "Hello World",
-  "description": "Hello World extension",
+  "name": "postgresql",
+  "displayName": "PostgreSQL",
+  "description": "Manage local PostgreSQL services for development",
   "version": "0.0.1",
   "icon": "icon.png",
-  "publisher": "you",
+  "publisher": "Philippe Martin",
   "license": "Apache-2.0",
   "engines": {
-    "podman-desktop": ">=1.10.0"
+    "podman-desktop": ">=1.14.0"
   },
   "main": "./dist/extension.js",
   "scripts": {

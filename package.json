@@ -1,10 +1,10 @@
 {
-  "name": "helloworld",
-  "displayName": "Hello World",
-  "description": "Hello World template for using webview",
-  "version": "1.4.0-next",
+  "name": "postgresql",
+  "displayName": "PostgreSQL",
+  "description": "Manage local PostgreSQL services for development",
+  "version": "0.0.1-next",
   "icon": "icon.png",
-  "publisher": "yourusername",
+  "publisher": "Philippe Martin",
   "private": true,
   "engines": {
     "node": ">=20.9.0",
