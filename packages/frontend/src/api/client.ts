@@ -1,5 +1,5 @@
-import type { HelloWorldApi } from '/@shared/src/HelloWorldApi';
 import { RpcBrowser } from '/@shared/src/messages/MessageProxy';
+import type { ServicesApi } from '/@shared/src/ServicesApi';
 
 /**
  * This file is the client side of the API. It is used to communicate with the backend, which allows
@@ -11,7 +11,7 @@ export interface RouterState {
 }
 const podmanDesktopApi = acquirePodmanDesktopApi();
 export const rpcBrowser: RpcBrowser = new RpcBrowser(window, podmanDesktopApi);
-export const helloWorldClient: HelloWorldApi = rpcBrowser.getProxy<HelloWorldApi>();
+export const servicesClient: ServicesApi = rpcBrowser.getProxy<ServicesApi>();
 
 // The below code is used to save the state of the router in the podmanDesktopApi, so
 // that we can determine the correct route to display when the extension is reloaded.
