@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import { RpcExtension } from '/@shared/src/messages/MessageProxy';
 import { ServicesApiImpl } from './services-api';
 import { ServicesApi } from '/@shared/src/ServicesApi';
+import { ServicesManager } from './managers/services';
 
 /**
  * Below is the "typical" extension.ts file that is used to activate and deactrivate the extension.
@@ -62,9 +63,13 @@ export async function activate(extensionContext: ExtensionContext): Promise<void
   // Update the webview panel with the new index.html file with corrected links.
   panel.webview.html = indexHtml;
 
+  // managers are created
+  const servicesManager = new ServicesManager(extensionContext, panel.webview);
+  await servicesManager.init();
+
   // We now register the 'api' for the webview to communicate to the backend
   const rpcExtension = new RpcExtension(panel.webview);
-  const servicesApi = new ServicesApiImpl(extensionContext, panel.webview);
+  const servicesApi = new ServicesApiImpl(extensionContext, panel.webview, servicesManager);
   rpcExtension.registerInstance<ServicesApi>(ServicesApiImpl, servicesApi);
 }
 
