@@ -1,5 +1,5 @@
 import * as podmanDesktopApi from '@podman-desktop/api';
-import { Service } from '/@shared/src/models/Service';
+import type { Service } from '/@shared/src/models/Service';
 import { Messages } from '/@shared/src/Messages';
 
 // For now, we are only managing this image, this could be configurable,
@@ -7,7 +7,6 @@ import { Messages } from '/@shared/src/Messages';
 const SERVICE_IMAGE = 'docker.io/library/postgres:';
 
 export class ServicesManager {
-  
   private services: Map<string, Service> = new Map();
 
   constructor(
@@ -17,7 +16,7 @@ export class ServicesManager {
 
   async loadContainers(): Promise<void> {
     const containers = await podmanDesktopApi.containerEngine.listContainers();
-    const pgContainers = containers.filter(c => c.Image.startsWith(SERVICE_IMAGE))
+    const pgContainers = containers.filter(c => c.Image.startsWith(SERVICE_IMAGE));
     const set = new Set<string>(this.services.keys());
     for (const pgContainer of pgContainers) {
       this.add(pgContainer);
@@ -30,17 +29,21 @@ export class ServicesManager {
   }
 
   async init(): Promise<void> {
-    podmanDesktopApi.containerEngine.onEvent((evt: podmanDesktopApi.ContainerJSONEvent) => {
+    podmanDesktopApi.containerEngine.onEvent(async (evt: podmanDesktopApi.ContainerJSONEvent) => {
       if (evt.Type === 'container') {
-        this.loadContainers();
+        await this.loadContainers();
       }
     });
-    this.loadContainers();
+    await this.loadContainers();
   }
 
   add(container: podmanDesktopApi.ContainerInfo): void {
     this.services.set(container.Id, {
-      name: container.Names.length ? (container.Names[0].startsWith('/') ? container.Names[0].slice(1): container.Names[0]) : 'unknown',
+      name: container.Names.length
+        ? container.Names[0].startsWith('/')
+          ? container.Names[0].slice(1)
+          : container.Names[0]
+        : 'unknown',
       containerId: container.Id,
       providerId: container.engineId,
     });
@@ -48,13 +51,13 @@ export class ServicesManager {
 
   sendState(): void {
     this.webview
-    .postMessage({
-      id: Messages.MSG_NEW_SERVICES_STATE,
-      body: this.getServices(),
-    })
-    .catch((err: unknown) => {
-      console.error(`Something went wrong while emitting services: ${String(err)}`);
-    });    
+      .postMessage({
+        id: Messages.MSG_NEW_SERVICES_STATE,
+        body: this.getServices(),
+      })
+      .catch((err: unknown) => {
+        console.error(`Something went wrong while emitting services: ${String(err)}`);
+      });
   }
 
   getServices(): Service[] {

@@ -8,7 +8,6 @@ const columns: TableColumn<Service>[] = [
   new TableColumn<Service>('Name', { width: '1fr', renderer: ColumnName, align: 'left' }),
 ];
 const row = new TableRow<Service>({ selectable: (_service): boolean => true });
-
 </script>
 
 <NavPage title="Services" searchEnabled={false}>

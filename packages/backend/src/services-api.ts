@@ -1,7 +1,7 @@
-import * as podmanDesktopApi from '@podman-desktop/api';
-import { ServicesApi } from '/@shared/src/ServicesApi';
-import { Service } from '/@shared/src/models/Service';
-import { ServicesManager } from './managers/services';
+import type * as podmanDesktopApi from '@podman-desktop/api';
+import type { ServicesApi } from '/@shared/src/ServicesApi';
+import type { Service } from '/@shared/src/models/Service';
+import type { ServicesManager } from './managers/services';
 
 export class ServicesApiImpl implements ServicesApi {
   constructor(

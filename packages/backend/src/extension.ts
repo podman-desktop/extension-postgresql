@@ -3,7 +3,7 @@ import * as extensionApi from '@podman-desktop/api';
 import fs from 'node:fs';
 import { RpcExtension } from '/@shared/src/messages/MessageProxy';
 import { ServicesApiImpl } from './services-api';
-import { ServicesApi } from '/@shared/src/ServicesApi';
+import type { ServicesApi } from '/@shared/src/ServicesApi';
 import { ServicesManager } from './managers/services';
 
 /**
