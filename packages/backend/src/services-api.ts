@@ -13,4 +13,8 @@ export class ServicesApiImpl implements ServicesApi {
   async getServices(): Promise<Service[]> {
     return this.servicesManager.getServices();
   }
+
+  async getServiceDetails(containerId: string): Promise<Service> {
+    return this.servicesManager.getServiceDetails(containerId);
+  }
 }

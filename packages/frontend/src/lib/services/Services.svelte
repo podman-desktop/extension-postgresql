@@ -1,5 +1,5 @@
 <script lang="ts">
-import { NavPage, Table, TableColumn, TableRow } from '@podman-desktop/ui-svelte';
+import { NavPage, Table, TableColumn, TableRow, Button } from '@podman-desktop/ui-svelte';
 import { services } from '../../stores/services';
 import type { Service } from '/@shared/src/models/Service';
 import ColumnName from './ColumnName.svelte';
@@ -7,6 +7,8 @@ import ColumnImageName from './ColumnImageName.svelte';
 import ColumnCredentials from './ColumnCredentials.svelte';
 import ColumnDatabase from './ColumnDatabase.svelte';
 import ColumnAddress from './ColumnAddress.svelte';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { router } from 'tinro';
 
 const columns: TableColumn<Service>[] = [
   new TableColumn<Service>('Name', { width: '1fr', renderer: ColumnName, align: 'left' }),
@@ -16,9 +18,16 @@ const columns: TableColumn<Service>[] = [
   new TableColumn<Service>('Credentials', { width: '1fr', renderer: ColumnCredentials, align: 'left' }),
 ];
 const row = new TableRow<Service>({ selectable: (_service): boolean => true });
+
+function createNewService(): void {
+  router.goto('/create');
+}
 </script>
 
 <NavPage title="Services" searchEnabled={false}>
+  <svelte:fragment slot="additional-actions">
+    <Button icon={faPlusCircle} title="Create a new service" on:click={createNewService}>New Service</Button>
+  </svelte:fragment>
   <div slot="content" class="flex flex-col min-w-full min-h-full">
     <div class="flex min-w-full min-h-full">
       <Table kind="services" data={$services} columns={columns} row={row} />

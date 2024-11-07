@@ -22,7 +22,7 @@ export class ServicesManager {
     const pgContainers = containers.filter(c => this.isServiceImage(c.Image));
     const set = new Set<string>(this.services.keys());
     for (const pgContainer of pgContainers) {
-      this.add(pgContainer);
+      await this.add(pgContainer);
       set.delete(pgContainer.Id);
     }
     for (const toRemove of set.keys()) {
@@ -40,9 +40,9 @@ export class ServicesManager {
     await this.loadContainers();
   }
 
-  async add(container: podmanDesktopApi.ContainerInfo): Promise<void> {
-    const inspect = await podmanDesktopApi.containerEngine.inspectContainer(container.engineId, container.Id);    
-    this.services.set(container.Id, {
+  async getServiceFromContainerInfo(container: podmanDesktopApi.ContainerInfo): Promise<Service> {
+    const inspect = await podmanDesktopApi.containerEngine.inspectContainer(container.engineId, container.Id);
+    return {
       name: container.Names.length
         ? container.Names[0].startsWith('/')
           ? container.Names[0].slice(1)
@@ -56,7 +56,11 @@ export class ServicesManager {
       dbName: this.getDb(inspect.Config.Env),
       user: this.getUser(inspect.Config.Env),
       password: this.getPassword(inspect.Config.Env),
-    });
+    };
+  }
+
+  async add(container: podmanDesktopApi.ContainerInfo): Promise<void> {
+    this.services.set(container.Id, await this.getServiceFromContainerInfo(container));
   }
 
   sendState(): void {
@@ -102,9 +106,9 @@ export class ServicesManager {
     return 0;
   }
 
-  private getEnvValue(envs: string[], envName: string): string | undefined{
+  private getEnvValue(envs: string[], envName: string): string | undefined {
     const env = envs.find(env => env.startsWith(`${envName}=`));
-    return env?.slice(envName.length+1);
+    return env?.slice(envName.length + 1);
   }
 
   getPassword(envs: string[]): string {
@@ -117,5 +121,13 @@ export class ServicesManager {
 
   getDb(envs: string[]): string {
     return this.getEnvValue(envs, 'POSTGRES_DB') ?? this.getUser(envs);
+  }
+
+  async getServiceDetails(containerId: string): Promise<Service> {
+    const service = this.services.get(containerId);
+    if (!service) {
+      throw new Error(`service not found: ${containerId}`);
+    }
+    return service;
   }
 }

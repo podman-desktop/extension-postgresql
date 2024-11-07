@@ -7,6 +7,8 @@ import Route from './lib/Route.svelte';
 import { onMount } from 'svelte';
 import { getRouterState } from './api/client';
 import Services from './lib/services/Services.svelte';
+import CreateService from './lib/create/CreateService.svelte';
+import ServiceDetails from './lib/details/ServiceDetails.svelte';
 
 // Using our router instance, we can determine if the application has been mounted.
 router.mode.hash();
@@ -28,12 +30,19 @@ onMount(() => {
 
   This can be expanded more by including more Route paths which the application can navigate too, for example /about, /contact etc.
 -->
-<Route path="/*" breadcrumb="PostgreSQL" isAppMounted={isMounted} let:meta>
-  <main class="flex flex-col w-screen h-screen overflow-hidden bg-[var(--pd-content-bg)]">
-    <div class="flex flex-row w-full h-full overflow-hidden">
+<main class="flex flex-col w-screen h-screen overflow-hidden bg-[var(--pd-content-bg)]">
+  <div class="flex flex-row w-full h-full overflow-hidden">
+    <Route path="/*" breadcrumb="PostgreSQL" isAppMounted={isMounted} let:meta>
       <Route path="/" breadcrumb="Services Page">
         <Services />
       </Route>
-    </div>
-  </main>
-</Route>
+    </Route>
+    <Route path="/:id/*" let:meta>
+      {#if meta.params.id === 'create'}
+        <CreateService />
+      {:else}
+        <ServiceDetails containerId={meta.params.id} />
+      {/if}
+    </Route>
+  </div>
+</main>
