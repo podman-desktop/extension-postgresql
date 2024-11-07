@@ -3,9 +3,17 @@ import { NavPage, Table, TableColumn, TableRow } from '@podman-desktop/ui-svelte
 import { services } from '../../stores/services';
 import type { Service } from '/@shared/src/models/Service';
 import ColumnName from './ColumnName.svelte';
+import ColumnImageName from './ColumnImageName.svelte';
+import ColumnCredentials from './ColumnCredentials.svelte';
+import ColumnDatabase from './ColumnDatabase.svelte';
+import ColumnAddress from './ColumnAddress.svelte';
 
 const columns: TableColumn<Service>[] = [
   new TableColumn<Service>('Name', { width: '1fr', renderer: ColumnName, align: 'left' }),
+  new TableColumn<Service>('Image', { width: '1fr', renderer: ColumnImageName, align: 'left' }),
+  new TableColumn<Service>('Address', { width: '1fr', renderer: ColumnAddress, align: 'left' }),
+  new TableColumn<Service>('Database', { width: '1fr', renderer: ColumnDatabase, align: 'left' }),
+  new TableColumn<Service>('Credentials', { width: '1fr', renderer: ColumnCredentials, align: 'left' }),
 ];
 const row = new TableRow<Service>({ selectable: (_service): boolean => true });
 </script>
