@@ -4,8 +4,9 @@ import { onMount } from 'svelte';
 import { router } from 'tinro';
 import { servicesClient } from '/@/api/client';
 import type { Service } from '/@shared/src/models/Service';
-import { getTabUrl, isTabSelected } from '../utils';
+import { isTabSelected } from '../utils';
 import Route from '../Route.svelte';
+import Summary from './Summary.svelte';
 
 export let containerId: string;
 
@@ -38,7 +39,7 @@ onMount(async () => {
       <Tab title="Terminal" selected={isTabSelected($router.path, 'terminal')} url={`${containerId}/terminal`} />
     </svelte:fragment>
     <svelte:fragment slot="content">
-      <Route path="/summary" breadcrumb="Summary">Summary...</Route>
+      <Route path="/summary" breadcrumb="Summary"><Summary service={service} /></Route>
       <Route path="/terminal" breadcrumb="Terminal">Terminal...</Route>
     </svelte:fragment>
   </DetailsPage>

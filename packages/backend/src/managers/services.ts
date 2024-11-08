@@ -130,4 +130,24 @@ export class ServicesManager {
     }
     return service;
   }
+
+  // SPEC: https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING
+  async getConnectionStrings(
+    containerId: string,
+  ): Promise<{ uri: { obfuscated: string; clear: string }; kv: { obfuscated: string; clear: string } }> {
+    const service = this.services.get(containerId);
+    if (!service) {
+      throw new Error(`service not found: ${containerId}`);
+    }
+    return {
+      uri: {
+        obfuscated: `postgresql://${service.user}:***@localhost:${service.port}/${service.dbName}`,
+        clear: `postgresql://${service.user}:${service.password}@localhost:${service.port}/${service.dbName}`,
+      },
+      kv: {
+        obfuscated: `host=localhost port=${service.port} dbname=${service.dbName} user=${service.user} password=***`,
+        clear: `host=localhost port=${service.port} dbname=${service.dbName} user=${service.user} password=${service.password}`,
+      },
+    };
+  }
 }

@@ -17,4 +17,10 @@ export class ServicesApiImpl implements ServicesApi {
   async getServiceDetails(containerId: string): Promise<Service> {
     return this.servicesManager.getServiceDetails(containerId);
   }
+
+  async getConnectionStrings(
+    containerId: string,
+  ): Promise<{ uri: { obfuscated: string; clear: string }; kv: { obfuscated: string; clear: string } }> {
+    return this.servicesManager.getConnectionStrings(containerId);
+  }
 }
