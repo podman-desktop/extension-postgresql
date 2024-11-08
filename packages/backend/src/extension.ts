@@ -21,7 +21,7 @@ export async function activate(extensionContext: ExtensionContext): Promise<void
   //
   // The 'index.html' and all other files are built with the `yarn build` command within packages/frontend which can also be ran with the
   // `yarn build` command in the main directory, which will also build the backend and shared packages.
-  const panel = extensionApi.window.createWebviewPanel('helloWorld', 'Hello World', {
+  const panel = extensionApi.window.createWebviewPanel('postgresql', 'PostgreSQL', {
     localResourceRoots: [extensionApi.Uri.joinPath(extensionContext.extensionUri, 'media')],
   });
   extensionContext.subscriptions.push(panel);
