@@ -1,4 +1,5 @@
 export interface Service {
+  running: boolean;
   // name of the container
   name: string;
   // name of the image used to start the container

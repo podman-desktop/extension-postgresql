@@ -9,10 +9,12 @@ import ColumnDatabase from './ColumnDatabase.svelte';
 import ColumnAddress from './ColumnAddress.svelte';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { router } from 'tinro';
+import ColumnStatus from './ColumnStatus.svelte';
 
 const columns: TableColumn<Service>[] = [
-  new TableColumn<Service>('Name', { width: '1fr', renderer: ColumnName, align: 'left' }),
-  new TableColumn<Service>('Image', { width: '1fr', renderer: ColumnImageName, align: 'left' }),
+  new TableColumn<Service>('Status', { width: '70px', renderer: ColumnStatus, align: 'center' }),
+  new TableColumn<Service>('Name', { width: '2fr', renderer: ColumnName, align: 'left' }),
+  new TableColumn<Service>('Image', { width: '2fr', renderer: ColumnImageName, align: 'left' }),
   new TableColumn<Service>('Address', { width: '1fr', renderer: ColumnAddress, align: 'left' }),
   new TableColumn<Service>('Database', { width: '1fr', renderer: ColumnDatabase, align: 'left' }),
   new TableColumn<Service>('Credentials', { width: '1fr', renderer: ColumnCredentials, align: 'left' }),

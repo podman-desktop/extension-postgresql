@@ -43,6 +43,7 @@ export class ServicesManager {
   async getServiceFromContainerInfo(container: podmanDesktopApi.ContainerInfo): Promise<Service> {
     const inspect = await podmanDesktopApi.containerEngine.inspectContainer(container.engineId, container.Id);
     return {
+      running: inspect.State.Running,
       name: container.Names.length
         ? container.Names[0].startsWith('/')
           ? container.Names[0].slice(1)
