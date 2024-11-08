@@ -6,4 +6,6 @@ export abstract class ServicesApi {
   abstract getConnectionStrings(
     containerId: string,
   ): Promise<{ uri: { obfuscated: string; clear: string }; kv: { obfuscated: string; clear: string } }>;
+  abstract getServiceImages(): Promise<Map<string, string>>;
+  abstract getFreePort(port: number): Promise<number>;
 }

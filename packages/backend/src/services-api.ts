@@ -2,6 +2,7 @@ import type * as podmanDesktopApi from '@podman-desktop/api';
 import type { ServicesApi } from '/@shared/src/ServicesApi';
 import type { Service } from '/@shared/src/models/Service';
 import type { ServicesManager } from './managers/services';
+import { getFreePort } from './utils/port';
 
 export class ServicesApiImpl implements ServicesApi {
   constructor(
@@ -22,5 +23,13 @@ export class ServicesApiImpl implements ServicesApi {
     containerId: string,
   ): Promise<{ uri: { obfuscated: string; clear: string }; kv: { obfuscated: string; clear: string } }> {
     return this.servicesManager.getConnectionStrings(containerId);
+  }
+
+  async getServiceImages(): Promise<Map<string, string>> {
+    return this.servicesManager.getServiceImages();
+  }
+
+  async getFreePort(port: number): Promise<number> {
+    return getFreePort(port);
   }
 }

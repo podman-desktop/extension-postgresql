@@ -151,4 +151,8 @@ export class ServicesManager {
       },
     };
   }
+
+  getServiceImages(): Map<string, string> {
+    return SERVICE_IMAGES;
+  }
 }
