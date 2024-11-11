@@ -32,6 +32,7 @@ export class ServicesManager {
   }
 
   async init(): Promise<void> {
+    // TODO do this only when provider is up and running
     podmanDesktopApi.containerEngine.onEvent(async (evt: podmanDesktopApi.ContainerJSONEvent) => {
       if (evt.Type === 'container') {
         await this.loadContainers();
@@ -154,5 +155,55 @@ export class ServicesManager {
 
   getServiceImages(): Map<string, string> {
     return SERVICE_IMAGES;
+  }
+
+  async createService(serviceName: string, imageWithTag: string, localPort: number, dbname: string | undefined, user: string | undefined, password: string): Promise<string> {
+    const provider = await this.getFirstProvider();
+    await podmanDesktopApi.containerEngine.pullImage(provider.connection, imageWithTag, () => { /* todo logs */});
+    const engineId = await this.getFirstEngine();
+    const envs = [
+      `POSTGRES_PASSWORD=${password}`,
+    ];
+    if (!!dbname) {
+      envs.push(`POSTGRES_DB=${dbname}`);
+    }
+    if (!!user) {
+      envs.push(`POSTGRES_USER=${user}`);
+    }
+    const container = await podmanDesktopApi.containerEngine.createContainer(engineId, {
+      name: serviceName,
+      Image: imageWithTag,
+      Env: envs,
+      HostConfig: {
+        PortBindings: {
+          '5432/tcp': [
+            {
+              HostIp: '0.0.0.0',
+              HostPort: `${localPort}`,
+            }
+          ],
+        },
+      },
+    });
+    return container.id;
+  }
+
+  async getFirstProvider(): Promise<podmanDesktopApi.ProviderContainerConnection> {
+    const providers: podmanDesktopApi.ProviderContainerConnection[] = podmanDesktopApi.provider.getContainerConnections();
+    const firstProvider = providers.find(({ connection }) => connection.type === 'podman' && connection.status() === 'started');
+    if (!firstProvider) {
+      throw new Error('no provider found');
+    }
+    return firstProvider;
+  }
+
+  async getFirstEngine(): Promise<string> {
+    const provider = await this.getFirstProvider();
+    const infos = await podmanDesktopApi.containerEngine.listInfos({ provider: provider.connection });
+    if (infos.length < 1) {
+      throw new Error('no engine found');
+    }
+    const engine = infos[0];
+    return engine.engineId;
   }
 }

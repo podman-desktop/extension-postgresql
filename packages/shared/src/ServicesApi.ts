@@ -8,4 +8,5 @@ export abstract class ServicesApi {
   ): Promise<{ uri: { obfuscated: string; clear: string }; kv: { obfuscated: string; clear: string } }>;
   abstract getServiceImages(): Promise<Map<string, string>>;
   abstract getFreePort(port: number): Promise<number>;
+  abstract createService(serviceName: string, imageWithTag: string, localPort: number, dbname: string | undefined, user: string | undefined, password: string): Promise<string>;
 }

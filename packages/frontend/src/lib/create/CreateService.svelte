@@ -4,29 +4,32 @@ import { onMount } from "svelte";
 import { router } from "tinro";
 import { servicesClient } from "/@/api/client";
 import PasswordInput from "../components/PasswordInput.svelte";
+import NumberInput from "../components/NumberInput.svelte";
 
 let images: { label: string, value: string}[];
 
+const MIN_PORT=1024;
+const MAX_PORT=49151;
+
+let serviceName: string = '';
 let localPort: number = 0;
 let imageName: string = '';
-let imageVersion: string = 'latest';
+let imageVersion: string = '17';
 let databaseName: string = 'postgres';
 let user: string = 'postgres';
 let password: string = '';
 
+let valid: boolean = false;
+
+$: valid = checkValidity(serviceName, imageName, password, localPort);
+
+function checkValidity(serviceName: string, imageName: string, password: string, localPort: number) {
+  return !!serviceName && !!imageName && !!password && MIN_PORT <= localPort && localPort <= MAX_PORT;
+}
+
 export function goToUpPage(): void {
   router.goto('/');
 }
-
-const onLocalPortInput = (event: Event): void => {
-  const raw = (event.target as HTMLInputElement).value;
-  try {
-    localPort = parseInt(raw);
-  } catch (e: unknown) {
-    console.warn('invalid value for container port', e);
-    localPort = 15432;
-  }
-};
 
 onMount(async () => {  
   const imgs = await servicesClient.getServiceImages();
@@ -41,6 +44,17 @@ onMount(async () => {
       console.error(err);
     });
 });
+
+async function createService() {
+  // TODO use getImageTags when available in API
+  let version = imageVersion;
+  if (imageName === 'docker.io/pgvector/pgvector:') {
+    version = `pg${version}`;
+  }
+  await servicesClient.createService(serviceName, imageName+version, localPort, databaseName, user, password);
+  // TODO handle errors
+  goToUpPage();
+}
 </script>
 
 <FormPage
@@ -60,14 +74,29 @@ onMount(async () => {
         <div class="space-y-6">
 
           <div>
+            <label for="nameInput" class="block mb-2 font-semibold text-[var(--pd-content-card-header-text)]"
+              >Name *</label>
+
+            <div class="flex flex-row items-center">
+              <Input
+                bind:value={serviceName}
+                class="w-full"
+                placeholder="my-service"
+                name="serviceName"
+                id="serviceName"
+                aria-label="Service name"
+                required />
+            </div>
+          </div>
+        
+          <div>
             <label for="imageInput" class="block mb-2 font-semibold text-[var(--pd-content-card-header-text)]"
-              >Image</label>
+              >Image *</label>
 
             <div class="flex flex-row items-center">
               <Dropdown name="imageInput" id="imageInput" class="basis-1/2" options={images} bind:value={imageName} />
               <div class="mx-2 ">version</div>
               <Dropdown bind:value={imageVersion}>
-                <option value="latest">latest</option>
                 <option value="17">17</option>
                 <option value="16">16</option>
                 <option value="15">15</option>
@@ -76,16 +105,17 @@ onMount(async () => {
               </Dropdown>
             </div>
           </div>
-        
+
           <div>
             <label
               for="localPort"
-              class="block mb-2 font-semibold text-[var(--pd-content-card-header-text)]">Local port</label>
+              class="block mb-2 font-semibold text-[var(--pd-content-card-header-text)]">Local port *</label>
             <div>
-              <Input
-                value={String(localPort ?? 0)}
-                on:input={onLocalPortInput}
-                class="w-full"
+              <NumberInput
+                type="integer"
+                minimum={MIN_PORT}
+                maximum={MAX_PORT}
+                bind:value={localPort}
                 placeholder="5432"
                 name="localPort"
                 id="localPort"
@@ -102,7 +132,7 @@ onMount(async () => {
               <Input
                 bind:value={databaseName}
                 class="w-full"
-                placeholder="postgres"
+                placeholder="'postgres' by default"
                 name="databaseName"
                 id="databaseName"
                 aria-label="Database name"
@@ -120,7 +150,7 @@ onMount(async () => {
                 <Input
                   bind:value={user}
                   class="w-full"
-                  placeholder="postgres"
+                  placeholder="'postgres' by default"
                   name="userInput"
                   id="userInput"
                   aria-label="User"
@@ -131,10 +161,10 @@ onMount(async () => {
             <div class="flex-1">
               <label
                 for="pwdInput"
-                class="block mb-2 font-semibold text-[var(--pd-content-card-header-text)]">Password</label>
+                class="block mb-2 font-semibold text-[var(--pd-content-card-header-text)]">Password *</label>
               <div>
                 <PasswordInput
-                  bind:value={password}
+                  bind:password={password}
                   class="w-full"
                   name="pwdInput"
                   id="pwdInput"
@@ -145,7 +175,7 @@ onMount(async () => {
   
           </div>
 
-          <div class="w-full flex flex-col"><Button>Create service</Button></div>
+          <div class="w-full flex flex-col"><Button disabled={!valid} on:click={createService}>Create service</Button></div>
         </div>
       </div>
     </div>

@@ -17,7 +17,12 @@ export function goToUpPage(): void {
 }
 
 onMount(async () => {
-  service = await servicesClient.getServiceDetails(containerId);
+  try {
+    service = await servicesClient.getServiceDetails(containerId);
+  } catch (err: unknown) {
+    console.debug(err);
+    goToUpPage();
+  }
 });
 </script>
 

@@ -32,4 +32,8 @@ export class ServicesApiImpl implements ServicesApi {
   async getFreePort(port: number): Promise<number> {
     return getFreePort(port);
   }
+
+  async createService(serviceName: string, imageWithTag: string, localPort: number, dbname: string | undefined, user: string | undefined, password: string): Promise<string> {
+    return this.servicesManager.createService(serviceName, imageWithTag, localPort, dbname, user, password);
+  }
 }
