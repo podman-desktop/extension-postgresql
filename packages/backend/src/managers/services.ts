@@ -1,6 +1,9 @@
 import * as podmanDesktopApi from '@podman-desktop/api';
 import type { Service } from '/@shared/src/models/Service';
 import { Messages } from '/@shared/src/Messages';
+import { Script } from '/@shared/src/ServicesApi';
+import { mkdir, mkdtemp, rm, rmdir, writeFile } from 'fs/promises';
+import { join } from 'path';
 
 // For now, we are only managing this image, this could be configurable,
 // or extended to several images
@@ -25,7 +28,7 @@ export class ServicesManager {
    */ 
   async loadContainers(containerId: string | undefined): Promise<void> {
     const containers = await podmanDesktopApi.containerEngine.listContainers();
-    const pgContainers = containers.filter(c => this.isServiceImage(c.Image));
+    const pgContainers = containers.filter(c => this.isServiceImage(c));
     if (containerId === undefined || pgContainers.find(c => c.Id === containerId)) {
       const set = new Set<string>(this.services.keys());
       for (const pgContainer of pgContainers) {
@@ -92,14 +95,22 @@ export class ServicesManager {
     return Array.from(this.services.values());
   }
 
-  isServiceImage(imageName: string): boolean {
-    return Array.from(SERVICE_IMAGES.keys()).some(name => imageName.startsWith(name));
+  isServiceImage(imageInfo: podmanDesktopApi.ContainerInfo): boolean {
+    for (const [key, value] of Object.entries(imageInfo.Labels)) {
+      if (key === 'postgres.baseImage') {
+        if (Array.from(SERVICE_IMAGES.keys()).some(name => value.startsWith(name))) {
+          return true;
+        }
+      }
+    }
+    return Array.from(SERVICE_IMAGES.keys()).some(name => imageInfo.Image.startsWith(name));
   }
 
   getServiceImage(imageName: string): string {
     const rawImageName = Array.from(SERVICE_IMAGES.keys()).find(name => imageName.startsWith(name));
     if (!rawImageName) {
-      return 'unknown';
+      const parts = imageName.split(':');
+      return parts[0];
     }
     return SERVICE_IMAGES.get(rawImageName) ?? 'unknown';
   }
@@ -169,7 +180,7 @@ export class ServicesManager {
     return SERVICE_IMAGES;
   }
 
-  async createService(serviceName: string, imageWithTag: string, localPort: number, dbname: string | undefined, user: string | undefined, password: string): Promise<string> {
+  async createService(serviceName: string, imageWithTag: string, localPort: number, dbname: string | undefined, user: string | undefined, password: string, interImageName: string | undefined, scripts: Script[]): Promise<string> {
     const provider = await this.getFirstProvider();
     await podmanDesktopApi.containerEngine.pullImage(provider.connection, imageWithTag, () => { /* todo logs */});
     const engineId = await this.getFirstEngine();
@@ -182,9 +193,42 @@ export class ServicesManager {
     if (!!user) {
       envs.push(`POSTGRES_USER=${user}`);
     }
+
+    let image: string = imageWithTag;
+    if (interImageName && scripts.length) {
+      image = interImageName;
+      const extensionDirectory = this.extensionContext.storagePath;
+      await mkdir(join(extensionDirectory, 'build', 'images'), { recursive: true });
+      const contextdir = await mkdtemp(join(extensionDirectory, 'build', 'images', 'job-'));
+      for (let script of scripts) {
+        await writeFile(join(contextdir, script.name), script.content);
+      }
+      let containerFile = `
+FROM ${imageWithTag}
+`;
+      for (let script of scripts) {
+        containerFile += `
+ADD ${script.name} /docker-entrypoint-initdb.d/${script.name}
+        `;
+      }
+
+      const containerfilePath = join(contextdir, 'Containerfile');
+      await writeFile(containerfilePath, containerFile);
+
+      await podmanDesktopApi.containerEngine.buildImage(contextdir, (eventName: 'stream' | 'error' | 'finish', data: string) => {
+        // TODO display logs
+      }, {
+        provider: provider.connection,
+        containerFile: 'Containerfile',
+        tag: interImageName,
+        // TODO add labels to list this image as base image
+      });
+      await rm(contextdir, { recursive: true, force: true });
+    }
+
     const container = await podmanDesktopApi.containerEngine.createContainer(engineId, {
       name: serviceName,
-      Image: imageWithTag,
+      Image: image,
       Env: envs,
       HostConfig: {
         PortBindings: {
@@ -195,6 +239,9 @@ export class ServicesManager {
             }
           ],
         },
+      },
+      Labels: {
+        'postgres.baseImage': imageWithTag,
       },
     });
     return container.id;

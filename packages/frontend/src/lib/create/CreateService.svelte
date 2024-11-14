@@ -17,6 +17,7 @@ let serviceName: string = '';
 let localPort: number = 0;
 let imageName: string = '';
 let imageVersion: string = '17';
+let interImageName: string | undefined = undefined;
 let databaseName: string = 'postgres';
 let user: string = 'postgres';
 let password: string = '';
@@ -24,11 +25,12 @@ let password: string = '';
 let valid: boolean = false;
 let creating: boolean = false;
 let error: string = '';
+let scripts: {type: 'sql' | 'sh', name: string, content: string}[] = [];
 
-$: valid = checkValidity(serviceName, imageName, password, localPort);
+$: valid = checkValidity(serviceName, imageName, password, localPort, scripts.length, interImageName);
 
-function checkValidity(serviceName: string, imageName: string, password: string, localPort: number) {
-  return !!serviceName && !!imageName && !!password && MIN_PORT <= localPort && localPort <= MAX_PORT;
+function checkValidity(serviceName: string, imageName: string, password: string, localPort: number, scriptsLength: number, interImageName: string | undefined) {
+  return !!serviceName && !!imageName && !!password && MIN_PORT <= localPort && localPort <= MAX_PORT && (!scriptsLength || !!interImageName);
 }
 
 export function goToUpPage(): void {
@@ -59,13 +61,20 @@ async function createService() {
     version = `pg${version}`;
   }
   try {
-    await servicesClient.createService(serviceName, imageName+version, localPort, databaseName, user, password);
+    await servicesClient.createService(serviceName, imageName+version, localPort, databaseName, user, password, interImageName, scripts.map(s => ({ name: s.name, content: s.content })));
     goToUpPage();
   } catch (err: unknown) {
     error = String(err);
   } finally {
     creating = false;
   }
+}
+
+function addScript(type: 'sql' | 'sh') {
+  const num = `${scripts.length + 1}`.padStart(2, '0');
+  const name = `${num}.${type}`;
+  scripts.push({type, name, content: ''});
+  scripts = [...scripts];
 }
 </script>
 
@@ -135,6 +144,24 @@ async function createService() {
                 </div>
               </div>
             
+              {#if scripts.length > 0}
+              <div>
+                <label for="nameInput" class="block mb-2 font-semibold text-[var(--pd-content-card-header-text)]"
+                  >Intermediary image name *</label>
+              
+                <div class="flex flex-row items-center">
+                  <Input
+                    bind:value={interImageName}
+                    class="w-full"
+                    placeholder="my-image"
+                    name="interImageName"
+                    id="interImageName"
+                    aria-label="Intermediary image name"
+                    required />
+                </div>
+              </div>
+              {/if}
+
               <div>
                 <label
                   for="localPort"
@@ -205,6 +232,30 @@ async function createService() {
               </div>
             </Route>
           
+            <Route path="/scripts" breadcrumb="Init scripts">
+              <div class="flex flex-col space-y-4 w-full">
+                {#if scripts.length > 0}
+                <span class="opacity-50">An intermediary image will be built with these scripts, you will need to set an "Intermediary image name" in the Basic tab</span>
+                {/if}
+                {#each scripts as script, i}
+                  <div class="flex flex-col space-y-1">
+                    <label for={'script_'+script.name}>{script.name}</label>
+                    <textarea
+                      class="w-full p-2 outline-none text-sm bg-[var(--pd-input-field-focused-bg)] rounded-sm text-[var(--pd-input-field-focused-text)] placeholder-[var(--pd-input-field-placeholder-text)]"
+                      rows="5" 
+                      bind:value="{scripts[i].content}" 
+                      id={'script_'+script.name}>
+                      {script.content}
+                    </textarea>
+                  </div>
+                {/each}
+                <div class="flex flex-row space-x-4 justify-end">
+                  <Button on:click={() => addScript('sql')}>Add an SQL script</Button>
+                  <Button on:click={() => addScript('sh')}>Add a shell script</Button>
+                </div>
+              </div>
+            </Route>
+
             <div class="w-full flex flex-col"><Button disabled={!valid} inProgress={creating} on:click={createService}>Create service</Button></div>
           </div>
         </div>
