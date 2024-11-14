@@ -20,6 +20,8 @@ let user: string = 'postgres';
 let password: string = '';
 
 let valid: boolean = false;
+let creating: boolean = false;
+let error: string = '';
 
 $: valid = checkValidity(serviceName, imageName, password, localPort);
 
@@ -46,14 +48,21 @@ onMount(async () => {
 });
 
 async function createService() {
+  creating = true;
+  error = '';
   // TODO use getImageTags when available in API
   let version = imageVersion;
   if (imageName === 'docker.io/pgvector/pgvector:') {
     version = `pg${version}`;
   }
-  await servicesClient.createService(serviceName, imageName+version, localPort, databaseName, user, password);
-  // TODO handle errors
-  goToUpPage();
+  try {
+    await servicesClient.createService(serviceName, imageName+version, localPort, databaseName, user, password);
+    goToUpPage();
+  } catch (err: unknown) {
+    error = String(err);
+  } finally {
+    creating = false;
+  }
 }
 </script>
 
@@ -69,7 +78,12 @@ async function createService() {
   </svelte:fragment>
   <svelte:fragment slot="content">
 
-    <div class="p-5 min-w-full h-full">
+    <div class="p-5 min-w-full h-full flex flex-col">
+
+      {#if error}
+        <div class="m-4 text-red-600">{error}</div>  
+      {/if}
+  
       <div class="bg-[var(--pd-content-card-bg)] p-6 space-y-2 lg:p-8 rounded-lg">
         <div class="space-y-6">
 
@@ -175,7 +189,7 @@ async function createService() {
   
           </div>
 
-          <div class="w-full flex flex-col"><Button disabled={!valid} on:click={createService}>Create service</Button></div>
+          <div class="w-full flex flex-col"><Button disabled={!valid} inProgress={creating} on:click={createService}>Create service</Button></div>
         </div>
       </div>
     </div>
