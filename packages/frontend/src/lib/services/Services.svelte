@@ -22,7 +22,7 @@ const columns: TableColumn<Service>[] = [
 const row = new TableRow<Service>({ selectable: (_service): boolean => true });
 
 function createNewService(): void {
-  router.goto('/create');
+  router.goto('/create/basic');
 }
 </script>
 
