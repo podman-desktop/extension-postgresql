@@ -17,28 +17,40 @@ export class ServicesManager {
     private webview: podmanDesktopApi.Webview,
   ) {}
 
-  async loadContainers(): Promise<void> {
+  /**
+   * reload the containers, if the event has been received for a container of interest
+   * or if containerId is undefined
+   * 
+   * containerId: the container for which an event has been received
+   */ 
+  async loadContainers(containerId: string | undefined): Promise<void> {
     const containers = await podmanDesktopApi.containerEngine.listContainers();
     const pgContainers = containers.filter(c => this.isServiceImage(c.Image));
-    const set = new Set<string>(this.services.keys());
-    for (const pgContainer of pgContainers) {
-      await this.add(pgContainer);
-      set.delete(pgContainer.Id);
+    if (containerId === undefined || pgContainers.find(c => c.Id === containerId)) {
+      const set = new Set<string>(this.services.keys());
+      for (const pgContainer of pgContainers) {
+        await this.add(pgContainer);
+        set.delete(pgContainer.Id);
+      }
+      for (const toRemove of set.keys()) {
+        this.services.delete(toRemove);
+      }
+      this.sendState();
     }
-    for (const toRemove of set.keys()) {
-      this.services.delete(toRemove);
-    }
-    this.sendState();
   }
 
   async init(): Promise<void> {
-    // TODO do this only when provider is up and running
-    podmanDesktopApi.containerEngine.onEvent(async (evt: podmanDesktopApi.ContainerJSONEvent) => {
-      if (evt.Type === 'container') {
-        await this.loadContainers();
+    const disposable = podmanDesktopApi.containerEngine.onEvent(async (evt: podmanDesktopApi.ContainerJSONEvent) => {
+      if (evt.Type === 'container' && evt.status !== 'health_status') {
+        await this.loadContainers(evt.id);
       }
     });
-    await this.loadContainers();
+    this.extensionContext.subscriptions.push(disposable);
+    try {
+      await this.loadContainers(undefined);
+    } catch (err: unknown) {
+      console.debug('initial load containers', err);
+    }
   }
 
   async getServiceFromContainerInfo(container: podmanDesktopApi.ContainerInfo): Promise<Service> {
