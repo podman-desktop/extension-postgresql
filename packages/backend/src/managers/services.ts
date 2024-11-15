@@ -45,7 +45,7 @@ export class ServicesManager {
   async init(): Promise<void> {
     const disposable = podmanDesktopApi.containerEngine.onEvent(async (evt: podmanDesktopApi.ContainerJSONEvent) => {
       if (evt.Type === 'container' && evt.status !== 'health_status') {
-        await this.loadContainers(evt.id);
+        await this.loadContainers(evt.status === 'remove' ? undefined : evt.id);
       }
     });
     this.extensionContext.subscriptions.push(disposable);
