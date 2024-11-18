@@ -18,4 +18,8 @@ export interface Service {
   user: string;
   // password to connect to service
   password: string;
+  // is pgadmin accessible for the service?
+  pgadmin: boolean;
+  // port to access pgAdmin
+  pgAdminPort?: number;
 }

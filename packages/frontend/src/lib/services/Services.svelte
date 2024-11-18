@@ -10,6 +10,7 @@ import ColumnAddress from './ColumnAddress.svelte';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { router } from 'tinro';
 import ColumnStatus from './ColumnStatus.svelte';
+import ColumnPgadmin from './ColumnPgadmin.svelte';
 
 const columns: TableColumn<Service>[] = [
   new TableColumn<Service>('Status', { width: '70px', renderer: ColumnStatus, align: 'center' }),
@@ -18,7 +19,8 @@ const columns: TableColumn<Service>[] = [
   new TableColumn<Service>('Address', { width: '1fr', renderer: ColumnAddress, align: 'left' }),
   new TableColumn<Service>('Database', { width: '1fr', renderer: ColumnDatabase, align: 'left' }),
   new TableColumn<Service>('Credentials', { width: '1fr', renderer: ColumnCredentials, align: 'left' }),
-];
+  new TableColumn<Service>('PgAdmin', { width: '1fr', renderer: ColumnPgadmin, align: 'left' }),
+      ];
 const row = new TableRow<Service>({ selectable: (_service): boolean => true });
 
 function createNewService(): void {

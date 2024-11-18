@@ -1,8 +1,8 @@
 import * as podmanDesktopApi from '@podman-desktop/api';
 import type { Service } from '/@shared/src/models/Service';
 import { Messages } from '/@shared/src/Messages';
-import { Script } from '/@shared/src/ServicesApi';
-import { mkdir, mkdtemp, rm, rmdir, writeFile } from 'fs/promises';
+import { CreateServiceOptions } from '/@shared/src/ServicesApi';
+import { mkdir, mkdtemp, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
 
 // For now, we are only managing this image, this could be configurable,
@@ -11,6 +11,11 @@ const SERVICE_IMAGES = new Map<string, string>([
   ['docker.io/library/postgres:', 'postgres Docker Official Image'],
   ['docker.io/pgvector/pgvector:', 'pgvector/pgvector'],
 ]);
+
+interface PodInfo {
+  engineId: string;
+  Id: string;
+};
 
 export class ServicesManager {
   private services: Map<string, Service> = new Map();
@@ -73,6 +78,8 @@ export class ServicesManager {
       dbName: this.getDb(inspect.Config.Env),
       user: this.getUser(inspect.Config.Env),
       password: this.getPassword(inspect.Config.Env),
+      pgadmin: this.getPgadmin(inspect.Config.Labels),
+      pgAdminPort: this.getPgadmin(inspect.Config.Labels) ? this.getPgadminPort(inspect.Config.Labels) : undefined,
     };
   }
 
@@ -148,6 +155,18 @@ export class ServicesManager {
     return this.getEnvValue(envs, 'POSTGRES_DB') ?? this.getUser(envs);
   }
 
+  getPgadmin(labels: { [label: string]: string} ): boolean {
+    return 'pgadmin.port' in labels;
+  }
+
+  getPgadminPort(labels: { [label: string]: string} ): number {
+    if (!('pgadmin.port' in labels)) {
+      throw new Error('pgadmin.port is not a label');
+    }
+    const str = labels['pgadmin.port'];
+    return parseInt(str);
+  }
+
   async getServiceDetails(containerId: string): Promise<Service> {
     const service = this.services.get(containerId);
     if (!service) {
@@ -180,33 +199,107 @@ export class ServicesManager {
     return SERVICE_IMAGES;
   }
 
-  async createService(serviceName: string, imageWithTag: string, localPort: number, dbname: string | undefined, user: string | undefined, password: string, interImageName: string | undefined, scripts: Script[]): Promise<string> {
-    const provider = await this.getFirstProvider();
-    await podmanDesktopApi.containerEngine.pullImage(provider.connection, imageWithTag, () => { /* todo logs */});
-    const engineId = await this.getFirstEngine();
-    const envs = [
-      `POSTGRES_PASSWORD=${password}`,
-    ];
-    if (!!dbname) {
-      envs.push(`POSTGRES_DB=${dbname}`);
+  async createService(serviceName: string, options: CreateServiceOptions): Promise<string> {
+    if (options.pgadmin && options.pgadminLocalPort === undefined) {
+      throw new Error('pgAdminLocalPort must be defined when pgadmin is set');
     }
-    if (!!user) {
-      envs.push(`POSTGRES_USER=${user}`);
+   
+    const provider = await this.getFirstPodmanProvider();
+    await podmanDesktopApi.containerEngine.pullImage(provider.connection, options.imageWithTag, () => { /* todo logs */});
+    const engineId = await this.getFirstPodmanEngine();
+    
+    let pod: PodInfo | undefined = undefined;
+    // With pgadmin, we create a pod which will contain the postgres container + the pgadmin container
+    if (options.pgadmin) {
+      pod = await this.createServicePod(provider.connection, serviceName, options);
+    }
+    
+    const container = await this.createMainContainer(provider.connection, engineId, pod, serviceName, options);
+
+    // Without pgadmin, the container is started as-is
+    if (!options.pgadmin) {
+      await podmanDesktopApi.containerEngine.startContainer(container.engineId, container.id);
+      return container.id;  
     }
 
-    let image: string = imageWithTag;
-    if (interImageName && scripts.length) {
-      image = interImageName;
-      const extensionDirectory = this.extensionContext.storagePath;
+    if (!pod) {
+      throw new Error('pod should exist');
+    }
+ 
+    // With pgadmin, we create the pgadmin container
+    await this.createPgadminContainer(provider.connection, engineId, pod, serviceName, options);
+
+    // start the pod
+    podmanDesktopApi.containerEngine.startPod(pod.engineId, pod.Id);
+    return container.id;    
+  }
+
+  async getFirstPodmanProvider(): Promise<podmanDesktopApi.ProviderContainerConnection> {
+    const providers: podmanDesktopApi.ProviderContainerConnection[] = podmanDesktopApi.provider.getContainerConnections();
+    const firstProvider = providers.find(({ connection }) => connection.type === 'podman' && connection.status() === 'started');
+    if (!firstProvider) {
+      throw new Error('no provider found');
+    }
+    return firstProvider;
+  }
+
+  async getFirstPodmanEngine(): Promise<string> {
+    const provider = await this.getFirstPodmanProvider();
+    const infos = await podmanDesktopApi.containerEngine.listInfos({ provider: provider.connection });
+    if (infos.length < 1) {
+      throw new Error('no engine found');
+    }
+    const engine = infos[0];
+    return engine.engineId;
+  }
+
+  private async createServicePod(provider: podmanDesktopApi.ContainerProviderConnection, serviceName: string, options: CreateServiceOptions): Promise<PodInfo> {
+    const pod = await podmanDesktopApi.containerEngine.createPod({
+      name: serviceName,
+      portmappings: [
+        {
+          container_port: 5432,
+          host_port: options.localPort,
+          host_ip: '0.0.0.0',
+          protocol: 'tcp',
+          range: 1,
+        },
+        {
+          container_port: 80,
+          host_port: options.pgadminLocalPort ?? 0,
+          host_ip: '0.0.0.0',
+          protocol: 'tcp',
+          range: 1,
+        },
+      ],
+      provider,
+    });
+    return pod;
+  }
+
+  private async createMainContainer(provider: podmanDesktopApi.ContainerProviderConnection, engineId: string, pod: PodInfo | undefined, serviceName: string, options: CreateServiceOptions): Promise<podmanDesktopApi.ContainerCreateResult> {
+    const extensionDirectory = this.extensionContext.storagePath;
+    const envs = [
+      `POSTGRES_PASSWORD=${options.password}`,
+    ];
+    if (!!options.dbname) {
+      envs.push(`POSTGRES_DB=${options.dbname}`);
+    }
+    if (!!options.user) {
+      envs.push(`POSTGRES_USER=${options.user}`);
+    }
+    let image: string = options.imageWithTag;
+    if (options.interImageName && options.scripts.length) {
+      image = options.interImageName;
       await mkdir(join(extensionDirectory, 'build', 'images'), { recursive: true });
       const contextdir = await mkdtemp(join(extensionDirectory, 'build', 'images', 'job-'));
-      for (let script of scripts) {
+      for (let script of options.scripts) {
         await writeFile(join(contextdir, script.name), script.content);
       }
       let containerFile = `
-FROM ${imageWithTag}
+FROM ${options.imageWithTag}
 `;
-      for (let script of scripts) {
+      for (let script of options.scripts) {
         containerFile += `
 ADD ${script.name} /docker-entrypoint-initdb.d/${script.name}
         `;
@@ -218,51 +311,98 @@ ADD ${script.name} /docker-entrypoint-initdb.d/${script.name}
       await podmanDesktopApi.containerEngine.buildImage(contextdir, (eventName: 'stream' | 'error' | 'finish', data: string) => {
         // TODO display logs
       }, {
-        provider: provider.connection,
+        provider,
         containerFile: 'Containerfile',
-        tag: interImageName,
+        tag: options.interImageName,
         // TODO add labels to list this image as base image
       });
       await rm(contextdir, { recursive: true, force: true });
     }
 
-    const container = await podmanDesktopApi.containerEngine.createContainer(engineId, {
+    const labels: { [label: string]: string }  = {
+      'postgres.baseImage': options.imageWithTag,
+    };
+    if (options.pgadmin) {
+      labels['pgadmin.port'] = `${options.pgadminLocalPort}`;
+    }
+    return podmanDesktopApi.containerEngine.createContainer(engineId, {
       name: serviceName,
       Image: image,
       Env: envs,
       HostConfig: {
-        PortBindings: {
+        PortBindings: pod ? undefined : {
           '5432/tcp': [
             {
               HostIp: '0.0.0.0',
-              HostPort: `${localPort}`,
+              HostPort: `${options.localPort}`,
             }
           ],
         },
       },
-      Labels: {
-        'postgres.baseImage': imageWithTag,
-      },
+      Labels: labels,
+      start: false,
+      pod: pod?.Id,
     });
-    return container.id;
   }
 
-  async getFirstProvider(): Promise<podmanDesktopApi.ProviderContainerConnection> {
-    const providers: podmanDesktopApi.ProviderContainerConnection[] = podmanDesktopApi.provider.getContainerConnections();
-    const firstProvider = providers.find(({ connection }) => connection.type === 'podman' && connection.status() === 'started');
-    if (!firstProvider) {
-      throw new Error('no provider found');
-    }
-    return firstProvider;
-  }
+  private async createPgadminContainer(provider: podmanDesktopApi.ContainerProviderConnection, engineId: string, pod: PodInfo | undefined, serviceName: string, options: CreateServiceOptions): Promise<podmanDesktopApi.ContainerCreateResult> {
+    const extensionDirectory = this.extensionContext.storagePath;
+    const containerFile = `FROM dpage/pgadmin4
+USER pgadmin
+COPY servers.json /pgadmin4/servers.json
+COPY pgpass /var/lib/pgadmin/pgpass
+USER root
+RUN chown 5050:0 /var/lib/pgadmin/pgpass
+RUN chmod 0600 /var/lib/pgadmin/pgpass
+USER pgadmin
+ENTRYPOINT ["/entrypoint.sh"]`;
+    const contextdir = await mkdtemp(join(extensionDirectory, 'build', 'images', 'job-'));
+    const containerfilePath = join(contextdir, 'Containerfile');
+    await writeFile(containerfilePath, containerFile);
 
-  async getFirstEngine(): Promise<string> {
-    const provider = await this.getFirstProvider();
-    const infos = await podmanDesktopApi.containerEngine.listInfos({ provider: provider.connection });
-    if (infos.length < 1) {
-      throw new Error('no engine found');
+    const serversFile = `{
+  "Servers": {
+    "1": {
+      "Name": "${options.dbname}",
+      "Group": "Servers",
+      "Host": "localhost",
+      "Port": 5432,
+      "MaintenanceDB": "${options.dbname}",
+      "Username": "${options.user}",
+      "SSLMode": "prefer",
+      "PassFile": "../../pgpass"
     }
-    const engine = infos[0];
-    return engine.engineId;
+  }
+}`;
+    const serversFilePath = join(contextdir, 'servers.json');
+    await writeFile(serversFilePath, serversFile);
+
+    const pgpassFile = `localhost:5432:*:${options.user}:${options.password}
+`;
+    const pgpassFilePath = join(contextdir, 'pgpass');
+    await writeFile(pgpassFilePath, pgpassFile);
+
+    const pgAdminImage = `${options.interImageName}-pgadmin`; // TODO make this an option?
+    await podmanDesktopApi.containerEngine.buildImage(contextdir, (eventName: 'stream' | 'error' | 'finish', data: string) => {
+      // TODO display logs
+    }, {
+      provider,
+      containerFile: 'Containerfile',
+      tag: pgAdminImage,
+    });
+    await rm(contextdir, { recursive: true, force: true });
+
+    return podmanDesktopApi.containerEngine.createContainer(engineId, {
+      name: `${serviceName}-pgadmin`,
+      Image: pgAdminImage,
+      Env: [
+        'PGADMIN_CONFIG_SERVER_MODE=False',
+        'PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False',
+        'PGADMIN_DEFAULT_EMAIL=contact@example.com',
+        'PGADMIN_DEFAULT_PASSWORD=SuperSecret',
+      ],
+      start: false,
+      pod: pod?.Id,
+    });
   }
 }
