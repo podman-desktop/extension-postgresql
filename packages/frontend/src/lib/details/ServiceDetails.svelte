@@ -41,11 +41,9 @@ onMount(async () => {
     </svelte:fragment>
     <svelte:fragment slot="tabs">
       <Tab title="Summary" selected={isTabSelected($router.path, 'summary')} url={`${containerId}/summary`} />
-      <Tab title="Terminal" selected={isTabSelected($router.path, 'terminal')} url={`${containerId}/terminal`} />
     </svelte:fragment>
     <svelte:fragment slot="content">
       <Route path="/summary" breadcrumb="Summary"><Summary service={service} /></Route>
-      <Route path="/terminal" breadcrumb="Terminal">Terminal...</Route>
     </svelte:fragment>
   </DetailsPage>
 {/if}
