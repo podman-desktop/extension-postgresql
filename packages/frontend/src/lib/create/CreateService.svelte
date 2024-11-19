@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Dropdown, FormPage, Input, Button, Tab } from "@podman-desktop/ui-svelte";
+import { Dropdown, FormPage, Input, Button, Tab, Checkbox } from "@podman-desktop/ui-svelte";
 import { onMount } from "svelte";
 import { router } from "tinro";
 import { servicesClient } from "/@/api/client";
@@ -13,6 +13,7 @@ let images: { label: string, value: string}[];
 const MIN_PORT=1024;
 const MAX_PORT=49151;
 
+// basic
 let serviceName: string = '';
 let localPort: number = 0;
 let imageName: string = '';
@@ -22,15 +23,26 @@ let databaseName: string = 'postgres';
 let user: string = 'postgres';
 let password: string = '';
 
+// init scripts
+let scripts: {type: 'sql' | 'sh', name: string, content: string}[] = [];
+
+// PgAdmin
+let pgadmin: boolean = false;
+let pgadminLocalPort: number;
+
 let valid: boolean = false;
 let creating: boolean = false;
 let error: string = '';
-let scripts: {type: 'sql' | 'sh', name: string, content: string}[] = [];
 
-$: valid = checkValidity(serviceName, imageName, password, localPort, scripts.length, interImageName);
+$: valid = checkValidity(serviceName, imageName, password, localPort, scripts.length, interImageName, pgadmin, pgadminLocalPort);
 
-function checkValidity(serviceName: string, imageName: string, password: string, localPort: number, scriptsLength: number, interImageName: string | undefined) {
-  return !!serviceName && !!imageName && !!password && MIN_PORT <= localPort && localPort <= MAX_PORT && (!scriptsLength || !!interImageName);
+function checkValidity(serviceName: string, imageName: string, password: string, localPort: number, scriptsLength: number, interImageName: string | undefined, pgadin: boolean, pgadminLocalPort: number) {
+  return !!serviceName && 
+    !!imageName && 
+    !!password && 
+    MIN_PORT <= localPort && localPort <= MAX_PORT && 
+    (!scriptsLength || !!interImageName) &&
+    (!pgadmin || (MIN_PORT <= pgadminLocalPort && pgadminLocalPort <= MAX_PORT));
 }
 
 export function goToUpPage(): void {
@@ -42,7 +54,7 @@ onMount(async () => {
   images = Array.from(imgs.keys()).map(a => ({ label: imgs.get(a)  ?? '', value: a }));
   imageName = images[0].value;
 
-  servicesClient
+  await servicesClient
     .getFreePort(5432)
     .then(port => {
       localPort = port;
@@ -50,7 +62,16 @@ onMount(async () => {
     .catch((err: unknown) => {
       console.error(err);
     });
-});
+
+  await servicesClient
+    .getFreePort(8080)
+    .then(port => {
+      pgadminLocalPort = port;
+    })
+    .catch((err: unknown) => {
+      console.error(err);
+    });
+  });
 
 async function createService() {
   creating = true;
@@ -61,7 +82,17 @@ async function createService() {
     version = `pg${version}`;
   }
   try {
-    await servicesClient.createService(serviceName, imageName+version, localPort, databaseName, user, password, interImageName, scripts.map(s => ({ name: s.name, content: s.content })));
+    await servicesClient.createService(serviceName, {
+      imageWithTag: imageName+version, 
+      localPort, 
+      dbname: databaseName, 
+      user, 
+      password, 
+      interImageName, 
+      scripts: scripts.map(s => ({ name: s.name, content: s.content })),
+      pgadmin,
+      pgadminLocalPort: pgadmin ? pgadminLocalPort : undefined,
+    });
     goToUpPage();
   } catch (err: unknown) {
     error = String(err);
@@ -107,6 +138,10 @@ function addScript(type: 'sql' | 'sh') {
                 title="Init scripts"
                 selected={isTabSelected($router.path, 'scripts')}
                 url={'create/scripts'} />
+                <Tab
+                title="PgAdmin"
+                selected={isTabSelected($router.path, 'pgadmin')}
+                url={'create/pgadmin'} />
             </div>
           
             <Route path="/basic" breadcrumb="Basic">
@@ -252,6 +287,39 @@ function addScript(type: 'sql' | 'sh') {
                 <div class="flex flex-row space-x-4 justify-end">
                   <Button on:click={() => addScript('sql')}>Add an SQL script</Button>
                   <Button on:click={() => addScript('sh')}>Add a shell script</Button>
+                </div>
+              </div>
+            </Route>
+
+            <Route path="/pgadmin" breadcrumb="PgAdmin">
+              <div class="flex flex-col space-y-4 w-full">
+                <div class="flex flex-row items-center">
+                  <Checkbox
+                    bind:checked={pgadmin}
+                    class="w-full"
+                    name="pgadmin"
+                    id="pgadmin"
+                    aria-label="pgadmin"
+                    required>Start a container with PgAdmin, in the same Pod, to access the service</Checkbox>
+                </div>
+
+                <div>
+                  <label
+                    for="pgAdminLocalPort"
+                    class="block mb-2 font-semibold text-[var(--pd-content-card-header-text)]">Admin Local port *</label>
+                  <div>
+                    <NumberInput
+                      type="integer"
+                      minimum={MIN_PORT}
+                      maximum={MAX_PORT}
+                      bind:value={pgadminLocalPort}
+                      placeholder="5432"
+                      name="pgAdminLocalPort"
+                      id="pgAdminLocalPort"
+                      aria-label="Port input"
+                      required 
+                      disabled={!pgadmin} />
+                  </div>
                 </div>
               </div>
             </Route>
