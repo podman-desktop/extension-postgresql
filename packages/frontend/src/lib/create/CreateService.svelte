@@ -18,7 +18,6 @@ let serviceName: string = '';
 let localPort: number = 0;
 let imageName: string = '';
 let imageVersion: string = '17';
-let interImageName: string | undefined = undefined;
 let databaseName: string = 'postgres';
 let user: string = 'postgres';
 let password: string = '';
@@ -34,14 +33,13 @@ let valid: boolean = false;
 let creating: boolean = false;
 let error: string = '';
 
-$: valid = checkValidity(serviceName, imageName, password, localPort, scripts.length, interImageName, pgadmin, pgadminLocalPort);
+$: valid = checkValidity(serviceName, imageName, password, localPort, scripts.length, pgadmin, pgadminLocalPort);
 
-function checkValidity(serviceName: string, imageName: string, password: string, localPort: number, scriptsLength: number, interImageName: string | undefined, pgadin: boolean, pgadminLocalPort: number) {
+function checkValidity(serviceName: string, imageName: string, password: string, localPort: number, scriptsLength: number, pgadin: boolean, pgadminLocalPort: number) {
   return !!serviceName && 
     !!imageName && 
     !!password && 
     MIN_PORT <= localPort && localPort <= MAX_PORT && 
-    (!scriptsLength || !!interImageName) &&
     (!pgadmin || (MIN_PORT <= pgadminLocalPort && pgadminLocalPort <= MAX_PORT));
 }
 
@@ -88,7 +86,6 @@ async function createService() {
       dbname: databaseName, 
       user, 
       password, 
-      interImageName, 
       scripts: scripts.map(s => ({ name: s.name, content: s.content })),
       pgadmin,
       pgadminLocalPort: pgadmin ? pgadminLocalPort : undefined,
@@ -179,24 +176,6 @@ function addScript(type: 'sql' | 'sh') {
                 </div>
               </div>
             
-              {#if scripts.length > 0}
-              <div>
-                <label for="nameInput" class="block mb-2 font-semibold text-[var(--pd-content-card-header-text)]"
-                  >Intermediary image name *</label>
-              
-                <div class="flex flex-row items-center">
-                  <Input
-                    bind:value={interImageName}
-                    class="w-full"
-                    placeholder="my-image"
-                    name="interImageName"
-                    id="interImageName"
-                    aria-label="Intermediary image name"
-                    required />
-                </div>
-              </div>
-              {/if}
-
               <div>
                 <label
                   for="localPort"
@@ -269,9 +248,6 @@ function addScript(type: 'sql' | 'sh') {
           
             <Route path="/scripts" breadcrumb="Init scripts">
               <div class="flex flex-col space-y-4 w-full">
-                {#if scripts.length > 0}
-                <span class="opacity-50">An intermediary image will be built with these scripts, you will need to set an "Intermediary image name" in the Basic tab</span>
-                {/if}
                 {#each scripts as script, i}
                   <div class="flex flex-col space-y-1">
                     <label for={'script_'+script.name}>{script.name}</label>

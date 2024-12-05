@@ -2,7 +2,7 @@ import * as podmanDesktopApi from '@podman-desktop/api';
 import type { Service } from '/@shared/src/models/Service';
 import { Messages } from '/@shared/src/Messages';
 import { CreateServiceOptions } from '/@shared/src/ServicesApi';
-import { mkdir, mkdtemp, rm, writeFile } from 'fs/promises';
+import { chmod, mkdir, mkdtemp, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
 
 // For now, we are only managing this image, this could be configurable,
@@ -288,36 +288,29 @@ export class ServicesManager {
     if (!!options.user) {
       envs.push(`POSTGRES_USER=${options.user}`);
     }
-    let image: string = options.imageWithTag;
-    if (options.interImageName && options.scripts.length) {
-      image = options.interImageName;
-      await mkdir(join(extensionDirectory, 'build', 'images'), { recursive: true });
-      const contextdir = await mkdtemp(join(extensionDirectory, 'build', 'images', 'job-'));
-      for (let script of options.scripts) {
-        await writeFile(join(contextdir, script.name), script.content);
-      }
-      let containerFile = `
-FROM ${options.imageWithTag}
-`;
-      for (let script of options.scripts) {
-        containerFile += `
-ADD ${script.name} /docker-entrypoint-initdb.d/${script.name}
-        `;
-      }
 
-      const containerfilePath = join(contextdir, 'Containerfile');
-      await writeFile(containerfilePath, containerFile);
-
-      await podmanDesktopApi.containerEngine.buildImage(contextdir, (eventName: 'stream' | 'error' | 'finish', data: string) => {
-        // TODO display logs
-      }, {
-        provider,
-        containerFile: 'Containerfile',
-        tag: options.interImageName,
-        // TODO add labels to list this image as base image
+    let volumeMounts: { source: string; target: string }[] = [];
+    if (options.scripts.length) {
+      await mkdir(join(extensionDirectory, 'volumes'), { recursive: true });
+      const volumeDir = await mkdtemp(join(extensionDirectory, 'volumes', 'main-scripts-'));
+      await chmod(volumeDir, '0755');
+      for (let script of options.scripts) {
+        await writeFile(join(volumeDir, script.name), script.content);
+      }
+      volumeMounts.push({
+        source: volumeDir,
+        target: '/docker-entrypoint-initdb.d',
       });
-      await rm(contextdir, { recursive: true, force: true });
     }
+
+    const Mounts = volumeMounts
+      .filter(volume => volume.source && volume.target)
+      .map(volume => ({
+        Target: volume.target,
+        Source: volume.source,
+        Type: 'bind',
+        Mode: 'Z',
+      } as podmanDesktopApi.MountSettings));
 
     const labels: { [label: string]: string }  = {
       'postgres.baseImage': options.imageWithTag,
@@ -327,9 +320,10 @@ ADD ${script.name} /docker-entrypoint-initdb.d/${script.name}
     }
     return podmanDesktopApi.containerEngine.createContainer(engineId, {
       name: serviceName,
-      Image: image,
+      Image: options.imageWithTag,
       Env: envs,
       HostConfig: {
+        Mounts,
         PortBindings: pod ? undefined : {
           '5432/tcp': [
             {
@@ -347,19 +341,9 @@ ADD ${script.name} /docker-entrypoint-initdb.d/${script.name}
 
   private async createPgadminContainer(provider: podmanDesktopApi.ContainerProviderConnection, engineId: string, pod: PodInfo | undefined, serviceName: string, options: CreateServiceOptions): Promise<podmanDesktopApi.ContainerCreateResult> {
     const extensionDirectory = this.extensionContext.storagePath;
-    const containerFile = `FROM dpage/pgadmin4
-USER pgadmin
-COPY servers.json /pgadmin4/servers.json
-COPY pgpass /var/lib/pgadmin/pgpass
-USER root
-RUN chown 5050:0 /var/lib/pgadmin/pgpass
-RUN chmod 0600 /var/lib/pgadmin/pgpass
-USER pgadmin
-ENTRYPOINT ["/entrypoint.sh"]`;
-    await mkdir(join(extensionDirectory, 'build', 'images'), { recursive: true });
-    const contextdir = await mkdtemp(join(extensionDirectory, 'build', 'images', 'job-'));
-    const containerfilePath = join(contextdir, 'Containerfile');
-    await writeFile(containerfilePath, containerFile);
+    let volumeMounts: { source: string; target: string }[] = [];
+    await mkdir(join(extensionDirectory, 'volumes'), { recursive: true });
+    const volumeDir = await mkdtemp(join(extensionDirectory, 'volumes', 'admin-'));
 
     const serversFile = `{
   "Servers": {
@@ -375,33 +359,48 @@ ENTRYPOINT ["/entrypoint.sh"]`;
     }
   }
 }`;
-    const serversFilePath = join(contextdir, 'servers.json');
+    const serversFilePath = join(volumeDir, 'servers.json');
     await writeFile(serversFilePath, serversFile);
 
     const pgpassFile = `localhost:5432:*:${options.user}:${options.password}
 `;
-    const pgpassFilePath = join(contextdir, 'pgpass');
+    const pgpassFilePath = join(volumeDir, 'pgpass');
     await writeFile(pgpassFilePath, pgpassFile);
 
-    const pgAdminImage = `${options.interImageName}-pgadmin`; // TODO make this an option?
-    await podmanDesktopApi.containerEngine.buildImage(contextdir, (eventName: 'stream' | 'error' | 'finish', data: string) => {
-      // TODO display logs
-    }, {
-      provider,
-      containerFile: 'Containerfile',
-      tag: pgAdminImage,
+    volumeMounts.push({
+      source: volumeDir,
+      target: '/mnt',
     });
-    await rm(contextdir, { recursive: true, force: true });
+
+    const Mounts = volumeMounts
+      .filter(volume => volume.source && volume.target)
+      .map(volume => ({
+        Target: volume.target,
+        Source: volume.source,
+        Type: 'bind',
+        Mode: 'Z',
+      } as podmanDesktopApi.MountSettings));
 
     return podmanDesktopApi.containerEngine.createContainer(engineId, {
       name: `${serviceName}-pgadmin`,
-      Image: pgAdminImage,
+      Image: `dpage/pgadmin4`,
+      Entrypoint: ['/bin/sh', '-c', `
+cp /mnt/servers.json /pgadmin4/servers.json;
+cp /mnt/pgpass /var/lib/pgadmin/pgpass;
+chown 5050:0 /var/lib/pgadmin/pgpass;
+chmod 0600 /var/lib/pgadmin/pgpass;
+chown pgadmin:pgadmin /var/lib/pgadmin/pgpass;
+/entrypoint.sh
+`],
       Env: [
         'PGADMIN_CONFIG_SERVER_MODE=False',
         'PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False',
         'PGADMIN_DEFAULT_EMAIL=contact@example.com',
         'PGADMIN_DEFAULT_PASSWORD=SuperSecret',
       ],
+      HostConfig: {
+        Mounts,
+      },
       start: false,
       pod: pod?.Id,
     });

@@ -11,7 +11,6 @@ export interface CreateServiceOptions {
   dbname?: string;
   user?: string;
   password: string;
-  interImageName?: string;
   scripts: Script[];
   pgadmin: boolean;
   pgadminLocalPort?: number;
