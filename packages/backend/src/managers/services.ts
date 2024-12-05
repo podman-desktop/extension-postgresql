@@ -356,6 +356,7 @@ RUN chown 5050:0 /var/lib/pgadmin/pgpass
 RUN chmod 0600 /var/lib/pgadmin/pgpass
 USER pgadmin
 ENTRYPOINT ["/entrypoint.sh"]`;
+    await mkdir(join(extensionDirectory, 'build', 'images'), { recursive: true });
     const contextdir = await mkdtemp(join(extensionDirectory, 'build', 'images', 'job-'));
     const containerfilePath = join(contextdir, 'Containerfile');
     await writeFile(containerfilePath, containerFile);
