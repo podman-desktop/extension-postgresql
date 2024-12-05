@@ -5,6 +5,8 @@ import { CreateServiceOptions } from '/@shared/src/ServicesApi';
 import { chmod, mkdir, mkdtemp, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
 
+const SECOND: number = 1_000_000_000;
+
 // For now, we are only managing this image, this could be configurable,
 // or extended to several images
 const SERVICE_IMAGES = new Map<string, string>([
@@ -344,6 +346,7 @@ export class ServicesManager {
     let volumeMounts: { source: string; target: string }[] = [];
     await mkdir(join(extensionDirectory, 'volumes'), { recursive: true });
     const volumeDir = await mkdtemp(join(extensionDirectory, 'volumes', 'admin-'));
+    await chmod(volumeDir, '0755');
 
     const serversFile = `{
   "Servers": {
@@ -368,8 +371,12 @@ export class ServicesManager {
     await writeFile(pgpassFilePath, pgpassFile);
 
     volumeMounts.push({
-      source: volumeDir,
-      target: '/mnt',
+      source: join(volumeDir, 'pgpass'),
+      target: '/mnt/pgpass',
+    });
+    volumeMounts.push({
+      source: join(volumeDir, 'servers.json'),
+      target: '/pgadmin4/servers.json',
     });
 
     const Mounts = volumeMounts
@@ -385,7 +392,6 @@ export class ServicesManager {
       name: `${serviceName}-pgadmin`,
       Image: `dpage/pgadmin4`,
       Entrypoint: ['/bin/sh', '-c', `
-cp /mnt/servers.json /pgadmin4/servers.json;
 cp /mnt/pgpass /var/lib/pgadmin/pgpass;
 chown 5050:0 /var/lib/pgadmin/pgpass;
 chmod 0600 /var/lib/pgadmin/pgpass;
@@ -403,6 +409,13 @@ chown pgadmin:pgadmin /var/lib/pgadmin/pgpass;
       },
       start: false,
       pod: pod?.Id,
+      HealthCheck: {
+        // must be the port INSIDE the container not the exposed one
+        Test: ['CMD-SHELL', `wget --no-verbose --tries=1 --spider http://localhost:80/ 2> /dev/null`],
+        Interval: SECOND * 5,
+        Retries: 30,
+        Timeout: SECOND * 2,
+      }
     });
   }
 }
