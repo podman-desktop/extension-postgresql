@@ -10,6 +10,40 @@
     "podman-desktop": ">=1.14.0"
   },
   "main": "./dist/extension.js",
+  "contributes": {
+    "icons": {
+      "pg-icon": {
+        "description": "PostgreSQL icon",
+        "default": {
+          "fontPath": "pg-icon.woff2",
+          "fontCharacter": "\\E001"
+        }
+      }
+    },
+    "menus": {
+      "dashboard/container": [
+        {
+          "command": "postgresql.pgadmin.start",
+          "title": "Start PgAdmin",
+          "when": "containerImageName =~ /docker\\.io\\/library\\/postgres/ || containerImageName =~ /docker\\.io\\/pgvector\\/pgvector/"
+        }
+      ]
+    },
+    "views": {
+      "icons/containersList": [
+        {
+          "when": "containerImageName =~ /docker\\.io\\/library\\/postgres/ || containerImageName =~ /docker\\.io\\/pgvector\\/pgvector/",
+          "icon": "${pg-icon}"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "postgresql.pgadmin.start",
+        "title": "PgAdmin: start..."
+      }
+    ]
+  },
   "scripts": {
     "build": "vite build",
     "test": "vitest run --coverage",

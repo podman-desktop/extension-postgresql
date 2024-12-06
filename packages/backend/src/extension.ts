@@ -71,6 +71,12 @@ export async function activate(extensionContext: ExtensionContext): Promise<void
   const rpcExtension = new RpcExtension(panel.webview);
   const servicesApi = new ServicesApiImpl(extensionContext, panel.webview, servicesManager);
   rpcExtension.registerInstance<ServicesApi>(ServicesApiImpl, servicesApi);
+
+  extensionContext.subscriptions.push(
+    extensionApi.commands.registerCommand('postgresql.pgadmin.start', async container => {
+      console.log('start pgadmin on container', container);
+    }),
+  );
 }
 
 export async function deactivate(): Promise<void> {
