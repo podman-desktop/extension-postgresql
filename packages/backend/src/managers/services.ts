@@ -19,6 +19,12 @@ interface PodInfo {
   Id: string;
 };
 
+interface CreatePgadminContainerOptions {
+  dbname: string;
+  user: string;
+  password: string;
+}
+
 export class ServicesManager {
   private services: Map<string, Service> = new Map();
 
@@ -229,7 +235,11 @@ export class ServicesManager {
     }
  
     // With pgadmin, we create the pgadmin container
-    await this.createPgadminContainer(provider.connection, engineId, pod, serviceName, options);
+    await this.createPgadminContainer(engineId, pod, `${serviceName}-pgadmin`, {
+      dbname: options.dbname ?? 'postgres',
+      user: options.user ?? 'postgres',
+      password: options.password,
+    });
 
     // start the pod
     podmanDesktopApi.containerEngine.startPod(pod.engineId, pod.Id);
@@ -341,7 +351,11 @@ export class ServicesManager {
     });
   }
 
-  private async createPgadminContainer(provider: podmanDesktopApi.ContainerProviderConnection, engineId: string, pod: PodInfo | undefined, serviceName: string, options: CreateServiceOptions): Promise<podmanDesktopApi.ContainerCreateResult> {
+  private async createPgadminContainer(
+    engineId: string, 
+    pod: PodInfo | undefined, 
+    containerName: string, 
+    options: CreatePgadminContainerOptions): Promise<podmanDesktopApi.ContainerCreateResult> {
     const extensionDirectory = this.extensionContext.storagePath;
     let volumeMounts: { source: string; target: string }[] = [];
     await mkdir(join(extensionDirectory, 'volumes'), { recursive: true });
@@ -389,7 +403,7 @@ export class ServicesManager {
       } as podmanDesktopApi.MountSettings));
 
     return podmanDesktopApi.containerEngine.createContainer(engineId, {
-      name: `${serviceName}-pgadmin`,
+      name: containerName,
       Image: `dpage/pgadmin4`,
       Entrypoint: ['/bin/sh', '-c', `
 cp /mnt/pgpass /var/lib/pgadmin/pgpass;
