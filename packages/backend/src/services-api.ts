@@ -1,5 +1,5 @@
 import type * as podmanDesktopApi from '@podman-desktop/api';
-import type { CreateServiceOptions, Script, ServicesApi } from '/@shared/src/ServicesApi';
+import type { CreateServiceOptions, ServicesApi } from '/@shared/src/ServicesApi';
 import type { Service } from '/@shared/src/models/Service';
 import type { ServicesManager } from './managers/services';
 import { getFreePort } from './utils/port';

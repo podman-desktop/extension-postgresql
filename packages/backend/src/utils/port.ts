@@ -31,7 +31,7 @@ export async function getFreePort(port = 0): Promise<number> {
     try {
       await isFreePort(port);
       isFree = true;
-    } catch (e) {
+    } catch {
       port++;
     }
   }

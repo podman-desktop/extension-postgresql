@@ -20,7 +20,7 @@ const columns: TableColumn<Service>[] = [
   new TableColumn<Service>('Database', { width: '1fr', renderer: ColumnDatabase, align: 'left' }),
   new TableColumn<Service>('Credentials', { width: '1fr', renderer: ColumnCredentials, align: 'left' }),
   new TableColumn<Service>('PgAdmin', { width: '1fr', renderer: ColumnPgadmin, align: 'left' }),
-      ];
+];
 const row = new TableRow<Service>({ selectable: (_service): boolean => true });
 
 function createNewService(): void {

@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import { RpcExtension } from '/@shared/src/messages/MessageProxy';
 import { ServicesApiImpl } from './services-api';
 import type { ServicesApi } from '/@shared/src/ServicesApi';
-import { CreatePgadminContainerOptions, ServicesManager } from './managers/services';
+import type { CreatePgadminContainerOptions} from './managers/services';
+import { ServicesManager } from './managers/services';
 
 /**
  * Below is the "typical" extension.ts file that is used to activate and deactrivate the extension.
@@ -80,11 +81,14 @@ export async function activate(extensionContext: ExtensionContext): Promise<void
       container.Ports = container.ports;
       const service = await servicesManager.getServiceFromContainerInfo(container);
       const provider = await servicesManager.getFirstPodmanProvider();
-      await extensionApi.containerEngine.pullImage(provider.connection, 'dpage/pgadmin4', () => { /* todo logs */});
+      await extensionApi.containerEngine.pullImage(provider.connection, 'dpage/pgadmin4', () => {
+        /* todo logs */
+      });
       const pgAdminContainer = await servicesManager.createPgadminContainer(
         container.engineId,
         undefined,
-        `${service.name}-pgadmin`, {
+        `${service.name}-pgadmin`,
+        {
           dbname: service.dbName,
           user: service.user,
           password: service.password,
