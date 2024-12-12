@@ -73,6 +73,18 @@ export class ServicesManager {
       }
     });
     this.extensionContext.subscriptions.push(disposable);
+    podmanDesktopApi.provider.onDidUpdateContainerConnection(async e => {
+      if (e.status === 'started') {
+        // remove timeout when https://github.com/podman-desktop/podman-desktop/issues/10319 is fixed
+        setTimeout(async () => {
+          try {
+            await this.loadContainers(undefined);
+          } catch (err: unknown) {
+            console.debug('initial load containers', err);
+          } 
+        }, 5_000);
+      }
+    });
     try {
       await this.loadContainers(undefined);
     } catch (err: unknown) {
