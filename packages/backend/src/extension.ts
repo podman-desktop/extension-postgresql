@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { RpcExtension } from '/@shared/src/messages/MessageProxy';
 import { ServicesApiImpl } from './services-api';
 import type { ServicesApi } from '/@shared/src/ServicesApi';
-import type { CreatePgadminContainerOptions} from './managers/services';
+import type { CreatePgadminContainerOptions } from './managers/services';
 import { ServicesManager } from './managers/services';
 
 /**
