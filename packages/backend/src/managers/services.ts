@@ -73,14 +73,21 @@ export class ServicesManager {
       }
     });
     this.extensionContext.subscriptions.push(disposable);
+    podmanDesktopApi.provider.onDidRegisterContainerConnection(async () => {
+      this.loadContainers(undefined).catch((err: unknown) => {
+        console.debug('initial load containers', err);
+      });
+    });
+    podmanDesktopApi.provider.onDidUnregisterContainerConnection(async () => {
+      this.loadContainers(undefined).catch((err: unknown) => {
+        console.debug('initial load containers', err);
+      });
+    });
     podmanDesktopApi.provider.onDidUpdateContainerConnection(async e => {
-      if (e.status === 'started') {
-        // remove timeout when https://github.com/podman-desktop/podman-desktop/issues/10319 is fixed
-        setTimeout(() => {
-          this.loadContainers(undefined).catch((err: unknown) => {
-            console.debug('initial load containers', err);
-          });
-        }, 5_000);
+      if (e.status === 'started' || e.status === 'stopped') {
+        this.loadContainers(undefined).catch((err: unknown) => {
+          console.debug('initial load containers', err);
+        });
       }
     });
     try {
