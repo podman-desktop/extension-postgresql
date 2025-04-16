@@ -34,16 +34,18 @@ onMount(async () => {
     breadcrumbTitle="Go back to Services"
     onclose={goToUpPage}
     onbreadcrumbClick={goToUpPage}>
-    <svelte:fragment slot="subtitle">
+    {#snippet subtitleSnippet()}
       <div class="flex gap-x-2 items-center text-[var(--pd-content-sub-header)]">
         <span class="text-xs">{service?.name}</span>
       </div>
-    </svelte:fragment>
-    <svelte:fragment slot="tabs">
+    {/snippet}
+    {#snippet tabsSnippet()}
       <Tab title="Summary" selected={isTabSelected($router.path, 'summary')} url={`${containerId}/summary`} />
-    </svelte:fragment>
-    <svelte:fragment slot="content">
-      <Route path="/summary" breadcrumb="Summary"><Summary service={service} /></Route>
-    </svelte:fragment>
+    {/snippet}
+    {#snippet contentSnippet()}
+      {#if service}
+        <Route path="/summary" breadcrumb="Summary"><Summary service={service} /></Route>
+      {/if}
+    {/snippet}
   </DetailsPage>
 {/if}
