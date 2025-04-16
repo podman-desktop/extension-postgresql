@@ -125,10 +125,10 @@ function addScript(type: 'sql' | 'sh') {
     breadcrumbTitle="Go back to Services"
     onclose={goToUpPage}
     onbreadcrumbClick={goToUpPage}>
-    <svelte:fragment slot="icon">
+    {#snippet icon()}
       <i class="fas fa-cube fa-2x" aria-hidden="true"></i>
-    </svelte:fragment>
-    <svelte:fragment slot="content">
+    {/snippet}
+    {#snippet content()}
       <div class="p-5 min-w-full h-full flex flex-col">
         {#if error}
           <div class="m-4 text-red-600">{error}</div>
@@ -306,6 +306,6 @@ function addScript(type: 'sql' | 'sh') {
           </div>
         </div>
       </div>
-    </svelte:fragment>
+    {/snippet}
   </FormPage>
 </Route>
