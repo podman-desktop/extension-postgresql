@@ -50,7 +50,7 @@
     "svelte": "5.28.2",
     "svelte-check": "^4.1.7",
     "typescript": "5.8.3",
-    "vite": "^6.3.3",
+    "vite": "^6.3.5",
     "vitest": "^2.0.2"
   },
   "workspaces": {
