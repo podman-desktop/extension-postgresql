@@ -157,8 +157,8 @@ importers:
         specifier: ^6.6.0
         version: 6.7.2
       '@podman-desktop/ui-svelte':
-        specifier: 1.18.0
-        version: 1.18.0(svelte-fa@4.0.4(svelte@5.28.2))(svelte@5.28.2)
+        specifier: 1.19.1
+        version: 1.19.1(svelte-fa@4.0.4(svelte@5.28.2))(svelte@5.28.2)
       '@sveltejs/vite-plugin-svelte':
         specifier: 5.0.3
         version: 5.0.3(svelte@5.28.2)(vite@6.3.5(@types/node@22.15.2)(jiti@1.21.7)(yaml@2.7.0))
@@ -717,8 +717,8 @@ packages:
   '@podman-desktop/api@1.18.1':
     resolution: {integrity: sha512-9c9IuDYADNq0u8DZvQ7qORorXa9md+VZtxFXbc7xuv7LKavu8Nb0PcEhci4r4zD+u7Onk/O1f9aijLwH8kHkYw==}
 
-  '@podman-desktop/ui-svelte@1.18.0':
-    resolution: {integrity: sha512-E1T45OvD8kTZhur4x0/ITxyzpDJDI26yt5z/gO3EdTvSYYfnE8GHS5+jnRULRKhOphWNPBr1ltdWAe7O36GSmQ==}
+  '@podman-desktop/ui-svelte@1.19.1':
+    resolution: {integrity: sha512-cJV9BYAp2/ZeNk1v1fqFO9uVpZSQP2wWI9yNqLb+XEfkH74n5IM4+cJam+a70mEhOTwBCfp2Y3shnCNBy8b/9g==}
     peerDependencies:
       svelte: ^4.0.0 || ^5.0.0
       svelte-fa: ^4.0.0
@@ -1852,6 +1852,9 @@ packages:
 
   humanize-duration@3.32.1:
     resolution: {integrity: sha512-inh5wue5XdfObhu/IGEMiA1nUXigSGcaKNemcbLRKa7jXYGDZXr3LoT9pTIzq2hPEbld7w/qv9h+ikWGz8fL1g==}
+
+  humanize-duration@3.32.2:
+    resolution: {integrity: sha512-jcTwWYeCJf4dN5GJnjBmHd42bNyK94lY49QTkrsAQrMTUoIYLevvDpmQtg5uv8ZrdIRIbzdasmSNZ278HHUPEg==}
 
   iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
@@ -3382,13 +3385,13 @@ snapshots:
 
   '@podman-desktop/api@1.18.1': {}
 
-  '@podman-desktop/ui-svelte@1.18.0(svelte-fa@4.0.4(svelte@5.28.2))(svelte@5.28.2)':
+  '@podman-desktop/ui-svelte@1.19.1(svelte-fa@4.0.4(svelte@5.28.2))(svelte@5.28.2)':
     dependencies:
       '@fortawesome/fontawesome-free': 6.7.2
       '@fortawesome/free-brands-svg-icons': 6.7.2
       '@fortawesome/free-regular-svg-icons': 6.7.2
       '@fortawesome/free-solid-svg-icons': 6.7.2
-      humanize-duration: 3.32.1
+      humanize-duration: 3.32.2
       moment: 2.30.1
       svelte: 5.28.2
       svelte-fa: 4.0.4(svelte@5.28.2)
@@ -4790,6 +4793,8 @@ snapshots:
       - supports-color
 
   humanize-duration@3.32.1: {}
+
+  humanize-duration@3.32.2: {}
 
   iconv-lite@0.6.3:
     dependencies:
