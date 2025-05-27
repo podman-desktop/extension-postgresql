@@ -148,9 +148,11 @@ export class ServicesManager {
   }
 
   isServiceImage(imageInfo: podmanDesktopApi.ContainerInfo): boolean {
-    for (const [key, value] of Object.entries(imageInfo.Labels)) {
-      if (key === 'postgres.baseImage' && Array.from(SERVICE_IMAGES.keys()).some(name => value.startsWith(name))) {
-        return true;
+    if (imageInfo.Labels) {
+      for (const [key, value] of Object.entries(imageInfo.Labels)) {
+        if (key === 'postgres.baseImage' && Array.from(SERVICE_IMAGES.keys()).some(name => value.startsWith(name))) {
+          return true;
+        }
       }
     }
     return Array.from(SERVICE_IMAGES.keys()).some(name => imageInfo.Image.startsWith(name));
@@ -161,9 +163,11 @@ export class ServicesManager {
   }
 
   isPgadminForContainer(pgadminContainer: podmanDesktopApi.ContainerInfo, pgContainer: podmanDesktopApi.ContainerInfo) {
-    for (const [key, value] of Object.entries(pgadminContainer.Labels)) {
-      if (key === 'postgres.containerId' && value === pgContainer.Id) {
-        return true;
+    if (pgadminContainer.Labels) {
+      for (const [key, value] of Object.entries(pgadminContainer.Labels)) {
+        if (key === 'postgres.containerId' && value === pgContainer.Id) {
+          return true;
+        }
       }
     }
     return false;
