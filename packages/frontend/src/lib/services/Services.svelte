@@ -29,12 +29,14 @@ function createNewService(): void {
 </script>
 
 <NavPage title="Services" searchEnabled={false}>
-  <svelte:fragment slot="additional-actions">
+  {#snippet additionalActions()}
     <Button icon={faPlusCircle} title="Create a new service" on:click={createNewService}>New Service</Button>
-  </svelte:fragment>
-  <div slot="content" class="flex flex-col min-w-full min-h-full">
-    <div class="flex min-w-full min-h-full">
-      <Table kind="services" data={$services} columns={columns} row={row} />
+  {/snippet}
+  {#snippet content()}
+    <div class="flex flex-col min-w-full min-h-full">
+      <div class="flex min-w-full min-h-full">
+        <Table kind="services" data={$services} columns={columns} row={row} />
+      </div>
     </div>
-  </div>
+  {/snippet}
 </NavPage>

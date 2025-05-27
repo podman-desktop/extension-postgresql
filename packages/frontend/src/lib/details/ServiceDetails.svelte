@@ -31,7 +31,6 @@ onMount(async () => {
     title="Service details"
     breadcrumbLeftPart="Services"
     breadcrumbRightPart="Service details"
-    breadcrumbTitle="Go back to Services"
     onclose={goToUpPage}
     onbreadcrumbClick={goToUpPage}>
     {#snippet subtitleSnippet()}
