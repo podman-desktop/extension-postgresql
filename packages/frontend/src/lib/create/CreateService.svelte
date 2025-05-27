@@ -1,10 +1,9 @@
 <script lang="ts">
-import { Dropdown, FormPage, Input, Button, Tab, Checkbox } from '@podman-desktop/ui-svelte';
+import { Dropdown, FormPage, Input, Button, Tab, Checkbox, NumberInput } from '@podman-desktop/ui-svelte';
 import { onMount } from 'svelte';
 import { router } from 'tinro';
 import { servicesClient } from '/@/api/client';
 import PasswordInput from '../components/PasswordInput.svelte';
-import NumberInput from '../components/NumberInput.svelte';
 import { isTabSelected } from '../utils';
 import Route from '../Route.svelte';
 
@@ -122,7 +121,6 @@ function addScript(type: 'sql' | 'sh') {
     title="Start a PostgreSQL service"
     breadcrumbLeftPart="Services"
     breadcrumbRightPart="Start a PostgreSQL service"
-    breadcrumbTitle="Go back to Services"
     onclose={goToUpPage}
     onbreadcrumbClick={goToUpPage}>
     {#snippet icon()}
@@ -190,9 +188,7 @@ function addScript(type: 'sql' | 'sh') {
                     minimum={MIN_PORT}
                     maximum={MAX_PORT}
                     bind:value={localPort}
-                    placeholder="5432"
                     name="localPort"
-                    id="localPort"
                     aria-label="Port input"
                     required />
                 </div>
@@ -269,13 +265,8 @@ function addScript(type: 'sql' | 'sh') {
             <Route path="/pgadmin" breadcrumb="PgAdmin">
               <div class="flex flex-col space-y-4 w-full">
                 <div class="flex flex-row items-center">
-                  <Checkbox
-                    bind:checked={pgadmin}
-                    class="w-full"
-                    name="pgadmin"
-                    id="pgadmin"
-                    aria-label="pgadmin"
-                    required>Start a container with PgAdmin, in the same Pod, to access the service</Checkbox>
+                  <Checkbox bind:checked={pgadmin} class="w-full" name="pgadmin" id="pgadmin" required
+                    >Start a container with PgAdmin, in the same Pod, to access the service</Checkbox>
                 </div>
 
                 <div>
@@ -289,9 +280,7 @@ function addScript(type: 'sql' | 'sh') {
                       minimum={MIN_PORT}
                       maximum={MAX_PORT}
                       bind:value={pgadminLocalPort}
-                      placeholder="5432"
                       name="pgAdminLocalPort"
-                      id="pgAdminLocalPort"
                       aria-label="Port input"
                       required
                       disabled={!pgadmin} />
