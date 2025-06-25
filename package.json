@@ -44,7 +44,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-redundant-undefined": "^1.0.0",
-    "eslint-plugin-sonarjs": "^1.0.4",
+    "eslint-plugin-sonarjs": "^3.0.3",
     "prettier": "^3.6.1",
     "prettier-plugin-svelte": "^3.4.0",
     "svelte": "5.34.7",
