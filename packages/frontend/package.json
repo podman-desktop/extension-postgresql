@@ -33,7 +33,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@tsconfig/svelte": "^5.0.5",
     "@types/humanize-duration": "^3.27.4",
-    "@types/node": "^22.15.21",
+    "@types/node": "^24.4.0",
     "@typescript-eslint/eslint-plugin": "^8.42.0",
     "@typescript-eslint/parser": "^6.21.0",
     "autoprefixer": "^10.4.21",
