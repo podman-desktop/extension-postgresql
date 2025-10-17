@@ -80,8 +80,8 @@ importers:
   packages/backend:
     dependencies:
       semver:
-        specifier: ^7.7.2
-        version: 7.7.2
+        specifier: ^7.7.3
+        version: 7.7.3
     devDependencies:
       '@podman-desktop/api':
         specifier: 1.21.0
@@ -2594,8 +2594,8 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
-  semver@7.7.2:
-    resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
+  semver@7.7.3:
+    resolution: {integrity: sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -3823,7 +3823,7 @@ snapshots:
       debug: 4.4.3
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.7.2
+      semver: 7.7.3
       tsutils: 3.21.0(typescript@5.9.2)
     optionalDependencies:
       typescript: 5.9.2
@@ -3838,7 +3838,7 @@ snapshots:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.3
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 1.4.3(typescript@5.9.2)
     optionalDependencies:
       typescript: 5.9.2
@@ -3855,7 +3855,7 @@ snapshots:
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 2.1.0(typescript@5.9.2)
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -3871,7 +3871,7 @@ snapshots:
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 2.1.0(typescript@5.9.2)
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -3887,7 +3887,7 @@ snapshots:
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.9.2)
       eslint: 8.57.1
       eslint-scope: 5.1.1
-      semver: 7.7.2
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -3901,7 +3901,7 @@ snapshots:
       '@typescript-eslint/types': 6.21.0
       '@typescript-eslint/typescript-estree': 6.21.0(typescript@5.9.2)
       eslint: 8.57.1
-      semver: 7.7.2
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -5045,7 +5045,7 @@ snapshots:
 
   is-bun-module@2.0.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   is-callable@1.2.7: {}
 
@@ -5265,7 +5265,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   marked@5.1.2: {}
 
@@ -5624,7 +5624,7 @@ snapshots:
 
   semver@6.3.1: {}
 
-  semver@7.7.2: {}
+  semver@7.7.3: {}
 
   set-function-length@1.2.2:
     dependencies:
