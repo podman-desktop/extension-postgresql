@@ -16,7 +16,7 @@ const MAX_PORT = 49151;
 let serviceName: string = '';
 let localPort: number = 0;
 let imageName: string = '';
-let imageVersion: string = '17';
+let imageVersion: string = '18';
 let databaseName: string = 'postgres';
 let user: string = 'postgres';
 let password: string = '';
@@ -170,6 +170,7 @@ function addScript(type: 'sql' | 'sh') {
                     bind:value={imageName} />
                   <div class="mx-2">version</div>
                   <Dropdown bind:value={imageVersion}>
+                    <option value="18">18</option>
                     <option value="17">17</option>
                     <option value="16">16</option>
                     <option value="15">15</option>
