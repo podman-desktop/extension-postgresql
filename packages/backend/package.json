@@ -4,7 +4,7 @@
   "description": "Manage local PostgreSQL services for development",
   "version": "0.4.0-next",
   "icon": "icon.png",
-  "publisher": "Philippe Martin",
+  "publisher": "podman-desktop",
   "license": "Apache-2.0",
   "engines": {
     "podman-desktop": ">=1.14.0"
