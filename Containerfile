@@ -1,6 +1,7 @@
 FROM scratch as builder
 COPY packages/backend/dist/ /extension/dist
 COPY packages/backend/package.json /extension/
+COPY packages/backend/pg-icon.woff2 /extension/
 COPY packages/backend/media/ /extension/media
 COPY LICENSE /extension/
 COPY packages/backend/icon.png /extension/
