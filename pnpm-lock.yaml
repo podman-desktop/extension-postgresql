@@ -157,8 +157,8 @@ importers:
         specifier: ^7.1.0
         version: 7.1.0
       '@podman-desktop/ui-svelte':
-        specifier: 1.22.1
-        version: 1.22.1(svelte-fa@4.0.4(svelte@5.43.6))(svelte@5.43.6)
+        specifier: 1.23.1
+        version: 1.23.1(svelte-fa@4.0.4(svelte@5.43.6))(svelte@5.43.6)
       '@sveltejs/vite-plugin-svelte':
         specifier: 5.1.0
         version: 5.1.0(svelte@5.43.6)(vite@7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1))
@@ -654,6 +654,15 @@ packages:
     resolution: {integrity: sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
+  '@floating-ui/core@1.7.3':
+    resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
+
+  '@floating-ui/dom@1.7.4':
+    resolution: {integrity: sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA==}
+
+  '@floating-ui/utils@0.2.10':
+    resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
   '@fortawesome/fontawesome-common-types@7.1.0':
     resolution: {integrity: sha512-l/BQM7fYntsCI//du+6sEnHOP6a74UixFyOYUyz2DLMXKx+6DEhfR3F2NYGE45XH1JJuIamacb4IZs9S0ZOWLA==}
     engines: {node: '>=6'}
@@ -741,8 +750,8 @@ packages:
   '@podman-desktop/api@1.22.1':
     resolution: {integrity: sha512-8o6jdbKaGqj80mDCjvS+wDJF2jVo1/RgV6eIFPf+Gi/2LF99nh69oDTSlBUndWNfc/MSphguXpbrBC6xYJhuZA==}
 
-  '@podman-desktop/ui-svelte@1.22.1':
-    resolution: {integrity: sha512-LhHPvphcKBuSIz5xqH6Uevhac32RCYNta45gH4BQYYKlsFtJxhVd9LIBHovzK6oxoQ++fNxtCvhUGEtR7Rw/6Q==}
+  '@podman-desktop/ui-svelte@1.23.1':
+    resolution: {integrity: sha512-WnwwJ3S0L6PMT569HH4wI6chLgLMrxa3XLLR7uSXDDaD6wyYUKQvmIk5Cna+5t4dBPI2RqB1drBm19NN9ihLZQ==}
     peerDependencies:
       svelte: ^4.0.0 || ^5.0.0
       svelte-fa: ^4.0.0
@@ -3426,6 +3435,17 @@ snapshots:
 
   '@eslint/js@8.57.1': {}
 
+  '@floating-ui/core@1.7.3':
+    dependencies:
+      '@floating-ui/utils': 0.2.10
+
+  '@floating-ui/dom@1.7.4':
+    dependencies:
+      '@floating-ui/core': 1.7.3
+      '@floating-ui/utils': 0.2.10
+
+  '@floating-ui/utils@0.2.10': {}
+
   '@fortawesome/fontawesome-common-types@7.1.0': {}
 
   '@fortawesome/fontawesome-free@7.1.0': {}
@@ -3518,8 +3538,9 @@ snapshots:
 
   '@podman-desktop/api@1.22.1': {}
 
-  '@podman-desktop/ui-svelte@1.22.1(svelte-fa@4.0.4(svelte@5.43.6))(svelte@5.43.6)':
+  '@podman-desktop/ui-svelte@1.23.1(svelte-fa@4.0.4(svelte@5.43.6))(svelte@5.43.6)':
     dependencies:
+      '@floating-ui/dom': 1.7.4
       '@fortawesome/fontawesome-free': 7.1.0
       '@fortawesome/free-brands-svg-icons': 7.1.0
       '@fortawesome/free-regular-svg-icons': 7.1.0
