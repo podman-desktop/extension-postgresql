@@ -24,7 +24,7 @@ importers:
         version: 8.40.0(eslint@8.57.1)(typescript@5.9.3)
       '@vitest/coverage-v8':
         specifier: ^2.0.2
-        version: 2.1.9(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.1.0))
+        version: 2.1.9(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.2.0))
       autoprefixer:
         specifier: ^10.4.22
         version: 10.4.22(postcss@8.5.6)
@@ -75,7 +75,7 @@ importers:
         version: 7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1)
       vitest:
         specifier: ^2.0.2
-        version: 2.1.9(@types/node@22.19.1)(jsdom@27.1.0)
+        version: 2.1.9(@types/node@22.19.1)(jsdom@27.2.0)
 
   packages/backend:
     dependencies:
@@ -97,7 +97,7 @@ importers:
         version: 6.21.0(eslint@8.57.1)(typescript@5.9.3)
       '@vitest/coverage-v8':
         specifier: ^2.0.2
-        version: 2.1.9(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.1.0))
+        version: 2.1.9(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.2.0))
       eslint:
         specifier: ^8.56.0
         version: 8.57.1
@@ -133,7 +133,7 @@ importers:
         version: 7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1)
       vitest:
         specifier: ^2.0.2
-        version: 2.1.9(@types/node@22.19.1)(jsdom@27.1.0)
+        version: 2.1.9(@types/node@22.19.1)(jsdom@27.2.0)
 
   packages/frontend:
     dependencies:
@@ -173,7 +173,7 @@ importers:
         version: 6.9.1
       '@testing-library/svelte':
         specifier: ^5.2.9
-        version: 5.2.9(svelte@5.43.6)(vite@7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1))(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.1.0))
+        version: 5.2.9(svelte@5.43.6)(vite@7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1))(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.2.0))
       '@testing-library/user-event':
         specifier: ^14.6.1
         version: 14.6.1(@testing-library/dom@10.4.1)
@@ -202,8 +202,8 @@ importers:
         specifier: ^3.33.1
         version: 3.33.1
       jsdom:
-        specifier: ^27.1.0
-        version: 27.1.0
+        specifier: ^27.2.0
+        version: 27.2.0
       moment:
         specifier: ^2.30.1
         version: 2.30.1
@@ -236,7 +236,7 @@ importers:
         version: 7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1)
       vitest:
         specifier: ^2.0.2
-        version: 2.1.9(@types/node@22.19.1)(jsdom@27.1.0)
+        version: 2.1.9(@types/node@22.19.1)(jsdom@27.2.0)
 
 packages:
 
@@ -315,8 +315,8 @@ packages:
     peerDependencies:
       '@csstools/css-tokenizer': ^3.0.4
 
-  '@csstools/css-syntax-patches-for-csstree@1.0.15':
-    resolution: {integrity: sha512-q0p6zkVq2lJnmzZVPR33doA51G7YOja+FBvRdp5ISIthL0MtFCgYHHhR563z9WFGxcOn0WfjSkPDJ5Qig3H3Sw==}
+  '@csstools/css-syntax-patches-for-csstree@1.0.16':
+    resolution: {integrity: sha512-2SpS4/UaWQaGpBINyG5ZuCHnUDeVByOhvbkARwfmnfxDvTaj80yOI1cD8Tw93ICV5Fx4fnyDKWQZI1CDtcWyUg==}
     engines: {node: '>=18'}
 
   '@csstools/css-tokenizer@3.0.4':
@@ -2157,8 +2157,8 @@ packages:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
 
-  jsdom@27.1.0:
-    resolution: {integrity: sha512-Pcfm3eZ+eO4JdZCXthW9tCDT3nF4K+9dmeZ+5X39n+Kqz0DDIABRP5CAEOHRFZk8RGuC2efksTJxrjp8EXCunQ==}
+  jsdom@27.2.0:
+    resolution: {integrity: sha512-454TI39PeRDW1LgpyLPyURtB4Zx1tklSr6+OFOipsxGUH1WMTvk6C65JQdrj455+DP2uJ1+veBEHTGFKWVLFoA==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
@@ -3242,7 +3242,7 @@ snapshots:
     dependencies:
       '@csstools/css-tokenizer': 3.0.4
 
-  '@csstools/css-syntax-patches-for-csstree@1.0.15': {}
+  '@csstools/css-syntax-patches-for-csstree@1.0.16': {}
 
   '@csstools/css-tokenizer@3.0.4': {}
 
@@ -3673,13 +3673,13 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
 
-  '@testing-library/svelte@5.2.9(svelte@5.43.6)(vite@7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1))(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.1.0))':
+  '@testing-library/svelte@5.2.9(svelte@5.43.6)(vite@7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1))(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.2.0))':
     dependencies:
       '@testing-library/dom': 10.4.1
       svelte: 5.43.6
     optionalDependencies:
       vite: 7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1)
-      vitest: 2.1.9(@types/node@22.19.1)(jsdom@27.1.0)
+      vitest: 2.1.9(@types/node@22.19.1)(jsdom@27.2.0)
 
   '@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1)':
     dependencies:
@@ -4031,7 +4031,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
-  '@vitest/coverage-v8@2.1.9(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.1.0))':
+  '@vitest/coverage-v8@2.1.9(vitest@2.1.9(@types/node@22.19.1)(jsdom@27.2.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -4045,7 +4045,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.1.9(@types/node@22.19.1)(jsdom@27.1.0)
+      vitest: 2.1.9(@types/node@22.19.1)(jsdom@27.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -4335,7 +4335,7 @@ snapshots:
   cssstyle@5.3.3:
     dependencies:
       '@asamuzakjp/css-color': 4.0.5
-      '@csstools/css-syntax-patches-for-csstree': 1.0.15
+      '@csstools/css-syntax-patches-for-csstree': 1.0.16
       css-tree: 3.1.0
 
   data-urls@6.0.0:
@@ -5218,7 +5218,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jsdom@27.1.0:
+  jsdom@27.2.0:
     dependencies:
       '@acemir/cssom': 0.9.23
       '@asamuzakjp/dom-selector': 6.7.4
@@ -6101,7 +6101,7 @@ snapshots:
     optionalDependencies:
       vite: 7.2.2(@types/node@22.19.1)(jiti@1.21.7)(yaml@2.8.1)
 
-  vitest@2.1.9(@types/node@22.19.1)(jsdom@27.1.0):
+  vitest@2.1.9(@types/node@22.19.1)(jsdom@27.2.0):
     dependencies:
       '@vitest/expect': 2.1.9
       '@vitest/mocker': 2.1.9(vite@5.4.21(@types/node@22.19.1))
@@ -6125,7 +6125,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.19.1
-      jsdom: 27.1.0
+      jsdom: 27.2.0
     transitivePeerDependencies:
       - less
       - lightningcss
