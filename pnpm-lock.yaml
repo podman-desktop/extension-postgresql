@@ -84,8 +84,8 @@ importers:
         version: 7.7.3
     devDependencies:
       '@podman-desktop/api':
-        specifier: 1.23.1
-        version: 1.23.1
+        specifier: 1.24.1
+        version: 1.24.1
       '@types/node':
         specifier: ^22
         version: 22.19.1
@@ -747,8 +747,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@podman-desktop/api@1.23.1':
-    resolution: {integrity: sha512-Z3cPF6l7YrydDxzXynsQc0pHo2ooopPqE3IM5EgVQq4/3B9ZBmPIo8P7eLMor44kFnLmQgAzUnX2AbUaXdPeqg==}
+  '@podman-desktop/api@1.24.1':
+    resolution: {integrity: sha512-tTl0LVbpyMUIgeAZ4Sx24A9U5Lg0tTCaBfq+K9ZtGe1OQTcNb1YqMm7Yyj4vKl2QTrLx6W0hkwbgpEcxsIyyRQ==}
 
   '@podman-desktop/ui-svelte@1.23.1':
     resolution: {integrity: sha512-WnwwJ3S0L6PMT569HH4wI6chLgLMrxa3XLLR7uSXDDaD6wyYUKQvmIk5Cna+5t4dBPI2RqB1drBm19NN9ihLZQ==}
@@ -3543,7 +3543,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@podman-desktop/api@1.23.1': {}
+  '@podman-desktop/api@1.24.1': {}
 
   '@podman-desktop/ui-svelte@1.23.1(svelte-fa@4.0.4(svelte@5.45.6))(svelte@5.45.6)':
     dependencies:
