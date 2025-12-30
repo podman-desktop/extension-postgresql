@@ -57,7 +57,7 @@
   "devDependencies": {
     "@podman-desktop/api": "1.24.2",
     "@types/node": "^22",
-    "@typescript-eslint/eslint-plugin": "^8.50.1",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
     "@typescript-eslint/parser": "^6.16.0",
     "@vitest/coverage-v8": "^2.0.2",
     "eslint": "^8.56.0",
