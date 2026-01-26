@@ -119,14 +119,14 @@ test('getServiceName returns image name when unknown', () => {
   expect(servicesManager.getServiceImage('quay.io/me/my-image:v42')).toEqual('quay.io/me/my-image');
 });
 
-test('getRuntimePath returns local path when on Windows', () => {
+test('getRuntimePath returns path on machine when on Windows', () => {
   (podmanDesktopApi.env as { isWindows: boolean }).isWindows = true;
   expect(servicesManager.getRuntimePath('C:\\Users\\me\\Documents\\myfile.txt')).toEqual(
     '/mnt/c/Users/me/Documents/myfile.txt',
   );
 });
 
-test('getRuntimePath returns local path when on non-Windows', () => {
+test('getRuntimePath returns same as local path when on non-Windows', () => {
   (podmanDesktopApi.env as { isWindows: boolean }).isWindows = false;
   expect(servicesManager.getRuntimePath('/home/me/Documents/myfile.txt')).toEqual('/home/me/Documents/myfile.txt');
 });
