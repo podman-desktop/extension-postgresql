@@ -23,6 +23,9 @@ import { vi } from 'vitest';
  * This file is referenced from vitest.config.js file.
  */
 const plugin = {
+  env: {
+    isWindows: false,
+  },
   containerEngine: {
     listContainers: vi.fn(),
   },
