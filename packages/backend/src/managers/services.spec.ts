@@ -1,15 +1,24 @@
 import { beforeEach, expect, test } from 'vitest';
 import { ServicesManager } from './services';
-import type * as podmanDesktopApi from '@podman-desktop/api';
+import * as podmanDesktopApi from '@podman-desktop/api';
 
 const extensionContext: podmanDesktopApi.ExtensionContext = {} as podmanDesktopApi.ExtensionContext;
 
 const webview: podmanDesktopApi.Webview = {} as podmanDesktopApi.Webview;
 
-let servicesManager: ServicesManager = {} as ServicesManager;
+class TestServicesManager extends ServicesManager {
+  constructor(extensionContext: podmanDesktopApi.ExtensionContext, webview: podmanDesktopApi.Webview) {
+    super(extensionContext, webview);
+  }
+  override getRuntimePath(localPath: string): string {
+    return super.getRuntimePath(localPath);
+  }
+}
+
+let servicesManager: TestServicesManager = {} as TestServicesManager;
 
 beforeEach(() => {
-  servicesManager = new ServicesManager(extensionContext, webview);
+  servicesManager = new TestServicesManager(extensionContext, webview);
 });
 
 test('isServiceImage returns false for non-postgres image and without expected label', () => {
@@ -108,4 +117,14 @@ test('getServiceName returns image description when known', () => {
 
 test('getServiceName returns image name when unknown', () => {
   expect(servicesManager.getServiceImage('quay.io/me/my-image:v42')).toEqual('quay.io/me/my-image');
+});
+
+test('getRuntimePath returns local path when on Windows', () => {
+  (podmanDesktopApi.env as { isWindows: boolean }).isWindows = true;
+  expect(servicesManager.getRuntimePath('C:\\Users\\me\\Documents\\myfile.txt')).toEqual('/mnt/c/Users/me/Documents/myfile.txt');
+});
+
+test('getRuntimePath returns local path when on non-Windows', () => {
+  (podmanDesktopApi.env as { isWindows: boolean }).isWindows = false;
+  expect(servicesManager.getRuntimePath('/home/me/Documents/myfile.txt')).toEqual('/home/me/Documents/myfile.txt');
 });
