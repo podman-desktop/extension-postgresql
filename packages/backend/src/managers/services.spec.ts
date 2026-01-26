@@ -121,7 +121,9 @@ test('getServiceName returns image name when unknown', () => {
 
 test('getRuntimePath returns local path when on Windows', () => {
   (podmanDesktopApi.env as { isWindows: boolean }).isWindows = true;
-  expect(servicesManager.getRuntimePath('C:\\Users\\me\\Documents\\myfile.txt')).toEqual('/mnt/c/Users/me/Documents/myfile.txt');
+  expect(servicesManager.getRuntimePath('C:\\Users\\me\\Documents\\myfile.txt')).toEqual(
+    '/mnt/c/Users/me/Documents/myfile.txt',
+  );
 });
 
 test('getRuntimePath returns local path when on non-Windows', () => {
