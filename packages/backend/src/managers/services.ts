@@ -460,11 +460,11 @@ export class ServicesManager {
     await writeFile(pgpassFilePath, pgpassFile);
 
     volumeMounts.push({
-      source: join(volumeDir, 'pgpass'),
+      source: this.getRuntimePath(pgpassFilePath),
       target: '/mnt/pgpass',
     });
     volumeMounts.push({
-      source: join(volumeDir, 'servers.json'),
+      source: this.getRuntimePath(serversFilePath),
       target: '/pgadmin4/servers.json',
     });
 
@@ -531,5 +531,13 @@ chown pgadmin:pgadmin /var/lib/pgadmin/pgpass;
       },
       Labels: labels,
     });
+  }
+
+  protected getRuntimePath(localPath: string): string {
+    if (!podmanDesktopApi.env.isWindows) {
+      return localPath;
+    }
+    const driveLetter = localPath.charAt(0);
+    return localPath.replace(`${driveLetter}:\\`, `/mnt/${driveLetter.toLowerCase()}/`).replace(/\\/g, '/').replace(/ /g, '\\ ');
   }
 }
