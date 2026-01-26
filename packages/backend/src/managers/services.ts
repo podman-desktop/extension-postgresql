@@ -540,7 +540,6 @@ chown pgadmin:pgadmin /var/lib/pgadmin/pgpass;
     const driveLetter = localPath.charAt(0);
     return localPath
       .replace(`${driveLetter}:\\`, `/mnt/${driveLetter.toLowerCase()}/`)
-      .replace(/\\/g, '/')
-      .replace(/ /g, '\\ ');
+      .replace(/\\/g, '/');
   }
 }
