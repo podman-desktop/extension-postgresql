@@ -128,6 +128,7 @@ export class RpcBrowser {
   }
 
   init() {
+    // eslint-disable-next-line sonarjs/post-message
     this.window.addEventListener('message', (event: MessageEvent) => {
       const message = event.data;
       if (isMessageResponse(message)) {
