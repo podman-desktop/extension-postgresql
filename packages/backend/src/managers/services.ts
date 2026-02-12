@@ -102,13 +102,13 @@ export class ServicesManager {
     pgadminContainer?: podmanDesktopApi.ContainerInfo,
   ): Promise<Service> {
     const inspect = await podmanDesktopApi.containerEngine.inspectContainer(container.engineId, container.Id);
+
+    const name = container.Names[0].startsWith('/') ? container.Names[0].slice(1) : container.Names[0];
+
+    const labels = pgadminContainer ? pgadminContainer.Labels : inspect.Config.Labels;
     return {
       running: inspect.State.Running,
-      name: container.Names.length
-        ? container.Names[0].startsWith('/')
-          ? container.Names[0].slice(1)
-          : container.Names[0]
-        : 'unknown',
+      name: container.Names.length ? name : 'unknown',
       imageName: this.getServiceImage(container.Image),
       imageVersion: this.getImageVersion(container.Image),
       containerId: container.Id,
@@ -119,9 +119,7 @@ export class ServicesManager {
       password: this.getPassword(inspect.Config.Env),
       pgadmin: this.getPgadmin(inspect.Config.Labels) || !!pgadminContainer,
       pgAdminPort:
-        this.getPgadmin(inspect.Config.Labels) || !!pgadminContainer
-          ? this.getPgadminPort(pgadminContainer ? pgadminContainer.Labels : inspect.Config.Labels)
-          : undefined,
+        this.getPgadmin(inspect.Config.Labels) || !!pgadminContainer ? this.getPgadminPort(labels) : undefined,
     };
   }
 
@@ -266,6 +264,7 @@ export class ServicesManager {
 
     const provider = await this.getFirstPodmanProvider();
     await podmanDesktopApi.containerEngine.pullImage(provider.connection, options.imageWithTag, () => {
+      // eslint-disable-next-line sonarjs/todo-tag
       /* todo logs */
     });
     const engineId = await this.getFirstPodmanEngine();
@@ -289,6 +288,7 @@ export class ServicesManager {
     }
 
     await podmanDesktopApi.containerEngine.pullImage(provider.connection, 'dpage/pgadmin4', () => {
+      // eslint-disable-next-line sonarjs/todo-tag
       /* todo logs */
     });
 
@@ -505,6 +505,7 @@ chown pgadmin:pgadmin /var/lib/pgadmin/pgpass;
         'PGADMIN_CONFIG_SERVER_MODE=False',
         'PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False',
         'PGADMIN_DEFAULT_EMAIL=contact@example.com',
+        // eslint-disable-next-line sonarjs/no-hardcoded-passwords
         'PGADMIN_DEFAULT_PASSWORD=SuperSecret',
       ],
       HostConfig: {
