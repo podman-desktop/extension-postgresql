@@ -248,7 +248,7 @@ function addScript(type: 'sql' | 'sh') {
                   <div class="flex flex-col space-y-1">
                     <label for={'script_' + script.name}>{script.name}</label>
                     <textarea
-                      class="w-full p-2 outline-none text-sm bg-[var(--pd-input-field-focused-bg)] rounded-sm text-[var(--pd-input-field-focused-text)] placeholder-[var(--pd-input-field-placeholder-text)]"
+                      class="w-full p-2 outline-hidden text-sm bg-[var(--pd-input-field-focused-bg)] rounded-sm text-[var(--pd-input-field-focused-text)] placeholder-[var(--pd-input-field-placeholder-text)]"
                       rows="5"
                       bind:value={scripts[i].content}
                       id={'script_' + script.name}>
