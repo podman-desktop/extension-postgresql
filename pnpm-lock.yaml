@@ -24,7 +24,7 @@ importers:
         version: 8.40.0(eslint@8.57.1)(typescript@5.9.3)
       '@vitest/coverage-v8':
         specifier: ^3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1))
+        version: 3.2.4(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1))
       concurrently:
         specifier: ^9.2.1
         version: 9.2.1
@@ -72,7 +72,7 @@ importers:
         version: 8.0.1(@types/node@24.10.4)(esbuild@0.27.2)(jiti@2.6.1)(yaml@2.8.1)
       vitest:
         specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1)
+        version: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1)
 
   packages/backend:
     dependencies:
@@ -94,7 +94,7 @@ importers:
         version: 6.21.0(eslint@8.57.1)(typescript@5.9.3)
       '@vitest/coverage-v8':
         specifier: ^3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1))
+        version: 3.2.4(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1))
       eslint:
         specifier: ^8.56.0
         version: 8.57.1
@@ -130,7 +130,7 @@ importers:
         version: 8.0.1(@types/node@24.10.4)(esbuild@0.27.2)(jiti@2.6.1)(yaml@2.8.1)
       vitest:
         specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1)
+        version: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1)
 
   packages/frontend:
     dependencies:
@@ -173,7 +173,7 @@ importers:
         version: 6.9.1
       '@testing-library/svelte':
         specifier: ^5.3.1
-        version: 5.3.1(svelte@5.54.0)(vite@8.0.1(@types/node@24.10.4)(esbuild@0.27.2)(jiti@2.6.1)(yaml@2.8.1))(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1))
+        version: 5.3.1(svelte@5.54.0)(vite@8.0.1(@types/node@24.10.4)(esbuild@0.27.2)(jiti@2.6.1)(yaml@2.8.1))(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1))
       '@testing-library/user-event':
         specifier: ^14.6.1
         version: 14.6.1(@testing-library/dom@10.4.1)
@@ -199,8 +199,8 @@ importers:
         specifier: ^3.33.2
         version: 3.33.2
       jsdom:
-        specifier: ^29.0.0
-        version: 29.0.0
+        specifier: ^29.0.1
+        version: 29.0.1
       moment:
         specifier: ^2.30.1
         version: 2.30.1
@@ -227,7 +227,7 @@ importers:
         version: 8.0.1(@types/node@24.10.4)(esbuild@0.27.2)(jiti@2.6.1)(yaml@2.8.1)
       vitest:
         specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1)
+        version: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1)
 
 packages:
 
@@ -2223,8 +2223,8 @@ packages:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
 
-  jsdom@29.0.0:
-    resolution: {integrity: sha512-9FshNB6OepopZ08unmmGpsF7/qCjxGPbo3NbgfJAnPeHXnsODE9WWffXZtRFRFe0ntzaAOcSKNJFz8wiyvF1jQ==}
+  jsdom@29.0.1:
+    resolution: {integrity: sha512-z6JOK5gRO7aMybVq/y/MlIpKh8JIi68FBKMUtKkK2KH/wMSRlCxQ682d08LB9fYXplyY/UXG8P4XXTScmdjApg==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
@@ -2877,9 +2877,6 @@ packages:
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
-  tailwindcss@4.2.1:
-    resolution: {integrity: sha512-/tBrSQ36vCleJkAOsy9kbNTgaxvGbyOamC30PRePTQe/o1MFwEKHQk4Cn7BNGaPtjp+PuUrByJehM1hgxfq4sw==}
-
   tailwindcss@4.2.2:
     resolution: {integrity: sha512-KWBIxs1Xb6NoLdMVqhbhgwZf2PGBpPEiwOqgI4pFIYbNTfBXiKYyWoTsXgBQ9WFg/OlhnvHaY+AEpW7wSmFo2Q==}
 
@@ -2923,11 +2920,11 @@ packages:
     resolution: {integrity: sha512-azl+t0z7pw/z958Gy9svOTuzqIk6xq+NSheJzn5MMWtWTFywIacg2wUlzKFGtt3cthx0r2SxMK0yzJOR0IES7Q==}
     engines: {node: '>=14.0.0'}
 
-  tldts-core@7.0.25:
-    resolution: {integrity: sha512-ZjCZK0rppSBu7rjHYDYsEaMOIbbT+nWF57hKkv4IUmZWBNrBWBOjIElc0mKRgLM8bm7x/BBlof6t2gi/Oq/Asw==}
+  tldts-core@7.0.26:
+    resolution: {integrity: sha512-5WJ2SqFsv4G2Dwi7ZFVRnz6b2H1od39QME1lc2y5Ew3eWiZMAeqOAfWpRP9jHvhUl881406QtZTODvjttJs+ew==}
 
-  tldts@7.0.25:
-    resolution: {integrity: sha512-keinCnPbwXEUG3ilrWQZU+CqcTTzHq9m2HhoUP2l7Xmi8l1LuijAXLpAJ5zRW+ifKTNscs4NdCkfkDCBYm352w==}
+  tldts@7.0.26:
+    resolution: {integrity: sha512-WiGwQjr0qYdNNG8KpMKlSvpxz652lqa3Rd+/hSaDcY4Uo6SKWZq2LAF+hsAhUewTtYhXlorBKgNF3Kk8hnjGoQ==}
     hasBin: true
 
   to-regex-range@5.0.1:
@@ -3016,8 +3013,8 @@ packages:
   undici-types@7.16.0:
     resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
 
-  undici@7.24.4:
-    resolution: {integrity: sha512-BM/JzwwaRXxrLdElV2Uo6cTLEjhSb3WXboncJamZ15NgUURmvlXvxa6xkwIOILIjPNo9i8ku136ZvWV0Uly8+w==}
+  undici@7.24.5:
+    resolution: {integrity: sha512-3IWdCpjgxp15CbJnsi/Y9TCDE7HWVN19j1hmzVhoAkY/+CJx449tVxT5wZc1Gwg8J+P0LWvzlBzxYRnHJ+1i7Q==}
     engines: {node: '>=20.18.1'}
 
   unrs-resolver@1.11.1:
@@ -3820,14 +3817,14 @@ snapshots:
     dependencies:
       svelte: 5.54.0
 
-  '@testing-library/svelte@5.3.1(svelte@5.54.0)(vite@8.0.1(@types/node@24.10.4)(esbuild@0.27.2)(jiti@2.6.1)(yaml@2.8.1))(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1))':
+  '@testing-library/svelte@5.3.1(svelte@5.54.0)(vite@8.0.1(@types/node@24.10.4)(esbuild@0.27.2)(jiti@2.6.1)(yaml@2.8.1))(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1))':
     dependencies:
       '@testing-library/dom': 10.4.1
       '@testing-library/svelte-core': 1.0.0(svelte@5.54.0)
       svelte: 5.54.0
     optionalDependencies:
       vite: 8.0.1(@types/node@24.10.4)(esbuild@0.27.2)(jiti@2.6.1)(yaml@2.8.1)
-      vitest: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1)
+      vitest: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1)
 
   '@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1)':
     dependencies:
@@ -4190,7 +4187,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
-  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1))':
+  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
@@ -4205,7 +4202,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1)
+      vitest: 3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -5325,7 +5322,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jsdom@29.0.0:
+  jsdom@29.0.1:
     dependencies:
       '@asamuzakjp/css-color': 5.0.1
       '@asamuzakjp/dom-selector': 7.0.3
@@ -5342,7 +5339,7 @@ snapshots:
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.1
-      undici: 7.24.4
+      undici: 7.24.5
       w3c-xmlserializer: 5.0.0
       webidl-conversions: 8.0.1
       whatwg-mimetype: 5.0.0
@@ -5983,8 +5980,6 @@ snapshots:
 
   symbol-tree@3.2.4: {}
 
-  tailwindcss@4.2.1: {}
-
   tailwindcss@4.2.2: {}
 
   tapable@2.3.0: {}
@@ -6019,11 +6014,11 @@ snapshots:
 
   tinyspy@4.0.4: {}
 
-  tldts-core@7.0.25: {}
+  tldts-core@7.0.26: {}
 
-  tldts@7.0.25:
+  tldts@7.0.26:
     dependencies:
-      tldts-core: 7.0.25
+      tldts-core: 7.0.26
 
   to-regex-range@5.0.1:
     dependencies:
@@ -6031,7 +6026,7 @@ snapshots:
 
   tough-cookie@6.0.1:
     dependencies:
-      tldts: 7.0.25
+      tldts: 7.0.26
 
   tr46@6.0.0:
     dependencies:
@@ -6120,7 +6115,7 @@ snapshots:
 
   undici-types@7.16.0: {}
 
-  undici@7.24.4: {}
+  undici@7.24.5: {}
 
   unrs-resolver@1.11.1:
     dependencies:
@@ -6206,7 +6201,7 @@ snapshots:
     optionalDependencies:
       vite: 8.0.1(@types/node@24.10.4)(esbuild@0.27.2)(jiti@2.6.1)(yaml@2.8.1)
 
-  vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.0)(lightningcss@1.32.0)(yaml@2.8.1):
+  vitest@3.2.4(@types/node@24.10.4)(jiti@2.6.1)(jsdom@29.0.1)(lightningcss@1.32.0)(yaml@2.8.1):
     dependencies:
       '@types/chai': 5.2.3
       '@vitest/expect': 3.2.4
@@ -6233,7 +6228,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.10.4
-      jsdom: 29.0.0
+      jsdom: 29.0.1
     transitivePeerDependencies:
       - jiti
       - less
