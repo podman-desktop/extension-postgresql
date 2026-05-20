@@ -1,5 +1,7 @@
 {
   "name": "postgresql",
+  "repository": "https://github.com/podman-desktop/extension-postgresql",
+  "homepage": "https://github.com/podman-desktop/extension-postgresql#readme",
   "displayName": "PostgreSQL",
   "description": "Manage local PostgreSQL services for development",
   "version": "0.6.0-next",
