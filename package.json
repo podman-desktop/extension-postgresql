@@ -60,7 +60,7 @@
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-redundant-undefined": "^1.0.0",
     "eslint-plugin-sonarjs": "^4.0.3",
-    "prettier": "^3.8.3",
+    "prettier": "^3.8.4",
     "prettier-plugin-svelte": "^4.1.0",
     "svelte": "5.56.3",
     "svelte-check": "^4.6.0",
