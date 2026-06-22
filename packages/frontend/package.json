@@ -34,7 +34,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@tsconfig/svelte": "^5.0.8",
     "@types/humanize-duration": "^3.27.4",
-    "@types/node": "^24",
+    "@types/node": "^26",
     "@typescript-eslint/eslint-plugin": "^8.61.1",
     "@typescript-eslint/parser": "^6.21.0",
     "filesize": "^11.0.17",
