@@ -173,7 +173,7 @@ importers:
         version: 7.1.2(svelte@5.56.4(@typescript-eslint/types@8.62.1))(vite@8.1.0(@types/node@24.10.4)(esbuild@0.28.1)(jiti@2.7.0))
       '@tailwindcss/typography':
         specifier: ^0.5.20
-        version: 0.5.20(tailwindcss@4.3.1)
+        version: 0.5.20(tailwindcss@4.3.2)
       '@tailwindcss/vite':
         specifier: ^4.3.2
         version: 4.3.2(vite@8.1.0(@types/node@24.10.4)(esbuild@0.28.1)(jiti@2.7.0))
@@ -232,8 +232,8 @@ importers:
         specifier: ^0.4.1
         version: 0.4.1(svelte@5.56.4(@typescript-eslint/types@8.62.1))
       tailwindcss:
-        specifier: ^4.3.1
-        version: 4.3.1
+        specifier: ^4.3.2
+        version: 4.3.2
       vite:
         specifier: ^8.1.0
         version: 8.1.0(@types/node@24.10.4)(esbuild@0.28.1)(jiti@2.7.0)
@@ -2850,9 +2850,6 @@ packages:
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
-  tailwindcss@4.3.1:
-    resolution: {integrity: sha512-hk+TB1m+K8CYNrP6rjQaq/Y+4Zylwpa87mLYBKCunwnnQ9p+fHb7kmSfGqyEJoxF/O6CDyABWVFEafNSYKll+Q==}
-
   tailwindcss@4.3.2:
     resolution: {integrity: sha512-WtctNNSH8A9jlMIqxzuYumOHU5uGZyRv0Q5svQl+oEPy5w84YpBxdb7MdqyiSPQge5jTJ6zFQLq0PFygdccSBA==}
 
@@ -3731,10 +3728,10 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.3.2
       '@tailwindcss/oxide-win32-x64-msvc': 4.3.2
 
-  '@tailwindcss/typography@0.5.20(tailwindcss@4.3.1)':
+  '@tailwindcss/typography@0.5.20(tailwindcss@4.3.2)':
     dependencies:
       postcss-selector-parser: 6.0.10
-      tailwindcss: 4.3.1
+      tailwindcss: 4.3.2
 
   '@tailwindcss/vite@4.3.2(vite@8.1.0(@types/node@24.10.4)(esbuild@0.28.1)(jiti@2.7.0))':
     dependencies:
@@ -5892,8 +5889,6 @@ snapshots:
       - '@typescript-eslint/types'
 
   symbol-tree@3.2.4: {}
-
-  tailwindcss@4.3.1: {}
 
   tailwindcss@4.3.2: {}
 
