@@ -22,3 +22,8 @@ updates:
         applies-to: version-updates
         patterns:
           - "@fortawesome/*"
+      vitest:
+        applies-to: version-updates
+        patterns:
+          - "@vitest/*"
+          - "vitest"
