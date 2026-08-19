@@ -31,6 +31,7 @@ FROM scratch
 COPY --from=builder /opt/app-root/src/packages/backend/dist/ /extension/dist
 COPY --from=builder /opt/app-root/src/packages/backend/package.json /extension/
 COPY --from=builder /opt/app-root/src/packages/backend/pg-icon.woff2 /extension/
+COPY --from=builder /opt/app-root/src/packages/backend/media/ /extension/media
 COPY --from=builder /opt/app-root/src/LICENSE /extension/
 COPY --from=builder /opt/app-root/src/packages/backend/icon.png /extension/
 COPY --from=builder /opt/app-root/src/README.md /extension/
