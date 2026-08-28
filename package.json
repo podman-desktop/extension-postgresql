@@ -34,7 +34,7 @@
     "wrap-ansi": "^7.0.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.67.0",
+    "@typescript-eslint/eslint-plugin": "^8.68.0",
     "@typescript-eslint/parser": "^8.0.1",
     "@vitest/coverage-v8": "^4.1.11",
     "concurrently": "^10.0.5",
