@@ -55,9 +55,6 @@ importers:
       eslint-plugin-no-null:
         specifier: ^1.0.2
         version: 1.0.2(eslint@8.57.1(supports-color@10.2.2))
-      eslint-plugin-redundant-undefined:
-        specifier: ^1.0.0
-        version: 1.0.0(@typescript-eslint/parser@8.40.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3))(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3)
       eslint-plugin-sonarjs:
         specifier: ^4.2.2
         version: 4.2.2(eslint@8.57.1(supports-color@10.2.2))
@@ -119,9 +116,6 @@ importers:
       eslint-plugin-no-null:
         specifier: ^1.0.2
         version: 1.0.2(eslint@8.57.1(supports-color@10.2.2))
-      eslint-plugin-redundant-undefined:
-        specifier: ^1.0.0
-        version: 1.0.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3))(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3)
       eslint-plugin-sonarjs:
         specifier: ^4.2.2
         version: 4.2.2(eslint@8.57.1(supports-color@10.2.2))
@@ -887,9 +881,6 @@ packages:
   '@types/humanize-duration@3.27.4':
     resolution: {integrity: sha512-yaf7kan2Sq0goxpbcwTQ+8E9RP6HutFBPv74T/IA/ojcHKhuKVlk2YFYyHhWZeLvZPzzLE3aatuQB4h0iqyyUA==}
 
-  '@types/json-schema@7.0.15':
-    resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
-
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
@@ -898,9 +889,6 @@ packages:
 
   '@types/node@24.19.1':
     resolution: {integrity: sha512-aS3/DG0oM05K0RIXXP+hKjinGG5IgSSVGzswZxW3O0sS3pH4/fycXundUC9XsszgKCk4gHXylTEK6hyFxVxnoQ==}
-
-  '@types/semver@7.7.0':
-    resolution: {integrity: sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==}
 
   '@typescript-eslint/eslint-plugin@8.71.0':
     resolution: {integrity: sha512-pqcS9c1HxZTHt7End4nXqd0s5lJrrFzrgCkKFJrsbUnaL6M3+6oBFZaslg6Gjsl3argl2DDRFROnXARaZ2e4Nw==}
@@ -1002,12 +990,6 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       typescript: '>=4.8.4 <6.1.0'
-
-  '@typescript-eslint/utils@6.21.0':
-    resolution: {integrity: sha512-NfWVaC8HP9T8cbKQxHcsJBY5YE1O33+jpMwN45qzWWaPDZgLIbo12toGMWnmhvCpd3sIxkpDw3Wv1B3dYrbDQQ==}
-    engines: {node: ^16.0.0 || >=18.0.0}
-    peerDependencies:
-      eslint: ^7.0.0 || ^8.0.0
 
   '@typescript-eslint/utils@8.71.0':
     resolution: {integrity: sha512-pKR/tEMVrXZG23UFKUn5BQf3zfmfk7KQceI2cGzywZ5nxM5Eu3hEJU1utjWzydtzBbcJAQhHN8iPCxobHpPcZQ==}
@@ -1594,13 +1576,6 @@ packages:
     engines: {node: '>=5.0.0'}
     peerDependencies:
       eslint: '>=3.0.0'
-
-  eslint-plugin-redundant-undefined@1.0.0:
-    resolution: {integrity: sha512-7qdYTBD968jFqd/BSMERF/zNveCl+9xrqC8kRZ9YSKR6bHoufi6HwvZXJwD/Gih7prfsh9F5Q4STGDxpj6zSCg==}
-    engines: {node: ^16.0.0 || >=18.0.0}
-    peerDependencies:
-      '@typescript-eslint/parser': ^6.2.0
-      eslint: ^8.46.0
 
   eslint-plugin-sonarjs@4.2.2:
     resolution: {integrity: sha512-usNF9GfP89ibwhfxpZaCMW40sC7UEOusDgDCk7lyqAhh4AYdbBaAgLVL5Y/QS0jSed8eJ2ACGH6zzE8ezd/yZQ==}
@@ -3465,8 +3440,6 @@ snapshots:
 
   '@types/humanize-duration@3.27.4': {}
 
-  '@types/json-schema@7.0.15': {}
-
   '@types/json5@0.0.29': {}
 
   '@types/marked@5.0.2': {}
@@ -3474,8 +3447,6 @@ snapshots:
   '@types/node@24.19.1':
     dependencies:
       undici-types: 7.24.6
-
-  '@types/semver@7.7.0': {}
 
   '@typescript-eslint/eslint-plugin@8.71.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3))(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3)':
     dependencies:
@@ -3638,20 +3609,6 @@ snapshots:
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
-
-  '@typescript-eslint/utils@6.21.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3)':
-    dependencies:
-      '@eslint-community/eslint-utils': 4.7.0(eslint@8.57.1(supports-color@10.2.2))
-      '@types/json-schema': 7.0.15
-      '@types/semver': 7.7.0
-      '@typescript-eslint/scope-manager': 6.21.0
-      '@typescript-eslint/types': 6.21.0
-      '@typescript-eslint/typescript-estree': 6.21.0(supports-color@10.2.2)(typescript@5.9.3)
-      eslint: 8.57.1(supports-color@10.2.2)
-      semver: 7.8.5
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
 
   '@typescript-eslint/utils@8.71.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3)':
     dependencies:
@@ -4319,24 +4276,6 @@ snapshots:
   eslint-plugin-no-null@1.0.2(eslint@8.57.1(supports-color@10.2.2)):
     dependencies:
       eslint: 8.57.1(supports-color@10.2.2)
-
-  eslint-plugin-redundant-undefined@1.0.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3))(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3):
-    dependencies:
-      '@typescript-eslint/parser': 6.21.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3)
-      '@typescript-eslint/utils': 6.21.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3)
-      eslint: 8.57.1(supports-color@10.2.2)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-
-  eslint-plugin-redundant-undefined@1.0.0(@typescript-eslint/parser@8.40.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3))(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3):
-    dependencies:
-      '@typescript-eslint/parser': 8.40.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3)
-      '@typescript-eslint/utils': 6.21.0(eslint@8.57.1(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.3)
-      eslint: 8.57.1(supports-color@10.2.2)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
 
   eslint-plugin-sonarjs@4.2.2(eslint@8.57.1(supports-color@10.2.2)):
     dependencies:
