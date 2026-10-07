@@ -3,7 +3,7 @@
     "strict":true,
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "lib": [
       "ES2017",
@@ -11,6 +11,7 @@
       "dom",
     ],
     "sourceMap": true,
+    "rootDir": "..",
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
