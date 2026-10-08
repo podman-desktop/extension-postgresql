@@ -20,7 +20,11 @@ export default defineConfig({
       '/@shared/': join(PACKAGE_ROOT, '../shared') + '/',
     },
   },
-  plugins: [tailwindcss(), svelte({ hot: !process.env.VITEST }), svelteTesting()],
+  plugins: [
+    tailwindcss(),
+    svelte(process.env.VITEST ? { compilerOptions: { hmr: false } } : {}),
+    svelteTesting(),
+  ],
   optimizeDeps: {
     exclude: [],
   },
