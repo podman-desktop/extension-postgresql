@@ -21,7 +21,7 @@ WORKDIR /opt/app-root/src
 
 COPY --chown=1001:1001 . .
 
-RUN npm i -g corepack@0.31.0 && corepack enable
+RUN npm i -g corepack@0.34.6 && corepack enable
 
 RUN pnpm install --frozen-lockfile
 RUN pnpm build
