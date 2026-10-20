@@ -29,7 +29,6 @@ export interface ISubscribedMessage {
   body: any;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UnaryRPC = (...args: any[]) => Promise<unknown>;
 
 export function isMessageRequest(content: unknown): content is IMessageRequest {

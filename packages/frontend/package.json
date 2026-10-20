@@ -11,8 +11,8 @@
     "test:watch": "vitest watch --coverage",
     "format:check": "prettier --check \"src/**/*.ts\"",
     "format:fix": "prettier --write \"src/**/*.{ts,svelte}\"",
-    "lint:check": "eslint . --ext js,ts,tsx",
-    "lint:fix": "eslint . --fix --ext js,ts,tsx",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix",
     "watch": "vite --mode development build -w"
   },
   "dependencies": {
@@ -35,8 +35,6 @@
     "@tsconfig/svelte": "^5.0.8",
     "@types/humanize-duration": "^3.27.4",
     "@types/node": "^24",
-    "@typescript-eslint/eslint-plugin": "^8.71.2",
-    "@typescript-eslint/parser": "^8.71.2",
     "filesize": "^11.0.26",
     "humanize-duration": "^3.35.0",
     "jsdom": "^30.1.3",

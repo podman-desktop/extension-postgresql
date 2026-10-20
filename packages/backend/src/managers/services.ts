@@ -505,7 +505,6 @@ chown pgadmin:pgadmin /var/lib/pgadmin/pgpass;
         'PGADMIN_CONFIG_SERVER_MODE=False',
         'PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False',
         'PGADMIN_DEFAULT_EMAIL=contact@example.com',
-        // eslint-disable-next-line sonarjs/no-hardcoded-passwords
         'PGADMIN_DEFAULT_PASSWORD=SuperSecret',
       ],
       HostConfig: {
