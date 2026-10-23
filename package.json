@@ -41,7 +41,7 @@
     "eslint-plugin-import-x": "^4.17.1",
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-sonarjs": "^4.2.2",
-    "globals": "^16.5.0",
+    "globals": "^17.13.0",
     "prettier": "^3.9.10",
     "prettier-plugin-svelte": "^4.1.1",
     "svelte": "5.57.2",
