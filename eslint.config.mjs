@@ -22,11 +22,13 @@ import tseslint from 'typescript-eslint';
 import { createNodeResolver, flatConfigs as importXConfigs } from 'eslint-plugin-import-x';
 import sonarjs from 'eslint-plugin-sonarjs';
 import noNull from 'eslint-plugin-no-null';
+import podmanDesktop from '@podman-desktop/eslint-config';
 import globals from 'globals';
 
 const withoutNodeGlobals = Object.fromEntries(Object.keys(globals.node).map(name => [name, 'off']));
 
 export default defineConfig([
+  ...podmanDesktop,
   {
     ignores: [
       '**/node_modules/**',
