@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2022, ubuntu-22.04, macos-14]
+        os: [windows-2025, ubuntu-26.04, macos-26]
     steps:
       - uses: actions/checkout@v7.0.1
 
@@ -60,7 +60,7 @@ jobs:
 
       # Check we don't have changes in git
       - name: Check no changes in git
-        if: ${{ matrix.os=='ubuntu-22.04'}}
+        if: ${{ matrix.os=='ubuntu-26.04'}}
         run: |
           if ! git diff --exit-code; then
             echo "Found changes in git"
