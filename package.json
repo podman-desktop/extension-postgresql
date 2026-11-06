@@ -36,7 +36,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@podman-desktop/eslint-config": "^0.1.0",
-    "@vitest/coverage-v8": "^5.0.5",
+    "@vitest/coverage-v8": "^5.1.0",
     "concurrently": "^10.0.6",
     "eslint": "^10.14.0",
     "eslint-plugin-import-x": "^4.17.1",
@@ -50,7 +50,7 @@
     "typescript": "6.0.3",
     "typescript-eslint": "^8.72.1",
     "vite": "^8.3.5",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
   },
   "workspaces": {
     "packages": [
