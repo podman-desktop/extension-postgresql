@@ -58,7 +58,7 @@
     "@podman-desktop/api": "1.30.5",
     "@types/node": "^24",
     "@vitest/coverage-v8": "^5.1.0",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.1",
     "typescript": "6.0.3",
     "vite": "^8.3.7",
     "vitest": "^5.1.0"
