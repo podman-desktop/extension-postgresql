@@ -55,7 +55,7 @@
     "watch": "vite --mode development build -w"
   },
   "devDependencies": {
-    "@podman-desktop/api": "1.30.5",
+    "@podman-desktop/api": "1.30.7",
     "@types/node": "^24",
     "@vitest/coverage-v8": "^5.1.0",
     "prettier": "^3.10.1",
