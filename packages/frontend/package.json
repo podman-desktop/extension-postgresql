@@ -35,7 +35,7 @@
     "@tsconfig/svelte": "^5.0.9",
     "@types/humanize-duration": "^3.27.4",
     "@types/node": "^24",
-    "filesize": "^11.0.34",
+    "filesize": "^11.0.35",
     "humanize-duration": "^3.35.1",
     "jsdom": "^31.0.1",
     "moment": "^2.31.0",
