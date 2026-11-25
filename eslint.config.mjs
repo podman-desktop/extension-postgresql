@@ -57,7 +57,9 @@ export default defineConfig([
     ],
     languageOptions: {
       parserOptions: {
-        project: ['packages/*/tsconfig.json'],
+        projectService: {
+          allowDefaultProject: ['types/*.d.ts'],
+        },
         tsconfigRootDir: import.meta.dirname,
       },
       globals: globals.node,
